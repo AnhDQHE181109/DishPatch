@@ -13,6 +13,9 @@
         android:theme="@style/Theme.DishPatch"
         tools:targetApi="31">
         <activity
+            android:name=".ui.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.LoginActivity"
             android:exported="false" />
         <activity
@@ -27,9 +30,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name">
-
-        </activity>
+            android:label="@string/app_name"></activity>
     </application>
 
 </manifest>
