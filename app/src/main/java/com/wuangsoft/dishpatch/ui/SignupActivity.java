@@ -58,10 +58,10 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String name, email, username, password;
-                name = editNameRegister.getText().toString();
-                email = editEmailRegister.getText().toString();
-                username = editUsernameRegister.getText().toString();
-                password = editPasswordRegister.getText().toString();
+                name = editNameRegister.getText().toString().trim();
+                email = editEmailRegister.getText().toString().trim();
+                username = editUsernameRegister.getText().toString().trim();
+                password = editPasswordRegister.getText().toString().trim();
                 if (TextUtils.isEmpty(email) || TextUtils.isEmpty(name) || TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
                     Toast.makeText(SignupActivity.this, "The field must not Empty!", Toast.LENGTH_SHORT).show();
                 } else {

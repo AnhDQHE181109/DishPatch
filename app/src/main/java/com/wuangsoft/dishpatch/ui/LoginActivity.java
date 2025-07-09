@@ -69,8 +69,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String email, password;
-                email = editTextEmail.getText().toString();
-                password = editTextPassword.getText().toString();
+                email = editTextEmail.getText().toString().trim();
+                password = editTextPassword.getText().toString().trim();
                 if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
                     Toast.makeText(LoginActivity.this, "This field must not empty!", Toast.LENGTH_SHORT).show();
                 } else {
