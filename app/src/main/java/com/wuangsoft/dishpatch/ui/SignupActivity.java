@@ -38,12 +38,22 @@ public class SignupActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        TextView signinRedirectText = findViewById(R.id.loginRedirectText);
         mAuth = FirebaseAuth.getInstance();
         editNameRegister = findViewById(R.id.signup_name);
         editEmailRegister = findViewById(R.id.signup_email);
         editUsernameRegister = findViewById(R.id.signup_username);
         editPasswordRegister = findViewById(R.id.signup_password);
         btnCreate = findViewById(R.id.signup_button);
+
+        signinRedirectText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
