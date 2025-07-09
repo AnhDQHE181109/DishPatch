@@ -47,11 +47,20 @@ public class LoginActivity extends AppCompatActivity {
         editTextEmail = findViewById(R.id.login_email);
         editTextPassword = findViewById(R.id.login_password);
         TextView signupRedirectText = findViewById(R.id.signupRedirectText);
+        TextView forgotRedirectText = findViewById(R.id.forgotPasswordRedirectText);
 
         signupRedirectText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        forgotRedirectText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
                 startActivity(intent);
             }
         });
