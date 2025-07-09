@@ -13,6 +13,10 @@
         android:theme="@style/Theme.DishPatch"
         tools:targetApi="31">
         <activity
+            android:name=".ui.ShoppingCartActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DishPatch" />
+        <activity
             android:name=".ui.ForgotPasswordActivity"
             android:exported="false" />
         <activity
