@@ -2,10 +2,12 @@ package com.wuangsoft.dishpatch.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -14,6 +16,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,96 +33,42 @@ import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText loginUsername, loginPassword;
-    Button loginButton;
-    TextView signupRedirectText;
-
+    private Button btnSignin, btnSignup;
+    private EditText editTextEmail, editTextPassword;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
-
-        loginUsername = findViewById(R.id.login_username);
-        loginPassword = findViewById(R.id.login_password);
-        signupRedirectText = findViewById(R.id.signupRedirectText);
-        loginButton = findViewById(R.id.login_button);
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        mAuth = FirebaseAuth.getInstance();
+        btnSignin = findViewById(R.id.login_button);
+        editTextEmail = findViewById(R.id.login_email);
+        editTextPassword = findViewById(R.id.login_password);
+        btnSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!validateUsername() | !validatePassword()) {
-
+                String email, password;
+                email = editTextEmail.getText().toString();
+                password = editTextPassword.getText().toString();
+                if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+                    Toast.makeText(LoginActivity.this, "This field must not empty!", Toast.LENGTH_SHORT).show();
                 } else {
-                    checkUser();
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                String user_id = mAuth.getCurrentUser().getUid();
+                                Toast.makeText(LoginActivity.this, user_id, Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Error Occurred!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 }
-            }
-        });
-
-        signupRedirectText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-        public Boolean validateUsername() {
-            String val = loginUsername.getText().toString();
-            if (val.isEmpty()) {
-                loginUsername.setError("Username cannot be empty!");
-                return false;
-            } else {
-                loginUsername.setError(null);
-                return true;
-            }
-
-        }
-
-    public Boolean validatePassword() {
-        String val = loginPassword.getText().toString();
-        if (val.isEmpty()) {
-            loginPassword.setError("Password cannot be empty!");
-            return false;
-        } else {
-            loginPassword.setError(null);
-            return true;
-        }
-
-    }
-
-    public void checkUser() {
-        String userUsername = loginUsername.getText().toString().trim();
-        String userPassword = loginPassword.getText().toString().trim();
-
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
-        Query checkUserDatabase = reference.orderByChild("username").equalTo(userUsername);
-
-        checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    loginUsername.setError(null);
-                    String passwordFromDB = snapshot.child(userUsername).child("password").getValue(String.class);
-
-                    if (!Objects.equals(passwordFromDB, userPassword)) {
-                        loginUsername.setError(null);
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                    } else {
-                        loginPassword.setError("Invalid Credentials");
-                        loginPassword.requestFocus();
-                    }
-                } else {
-                    loginUsername.setError("User does not exist");
-                    loginUsername.requestFocus();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
