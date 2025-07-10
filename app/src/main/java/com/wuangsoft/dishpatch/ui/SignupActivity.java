@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -64,6 +65,10 @@ public class SignupActivity extends AppCompatActivity {
                 password = editPasswordRegister.getText().toString().trim();
                 if (TextUtils.isEmpty(email) || TextUtils.isEmpty(name) || TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
                     Toast.makeText(SignupActivity.this, "The field must not Empty!", Toast.LENGTH_SHORT).show();
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    editEmailRegister.setError("Invalid email address");
+                } else if (!isValidPassword(password)) {
+                    editPasswordRegister.setError("Password must be at least 6 characters long.");
                 } else {
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -80,6 +85,11 @@ public class SignupActivity extends AppCompatActivity {
                     });
                 }
             }
+
+            private boolean isValidPassword(String password) {
+                return password.length() >= 6;
+            }
+
         });
     }
 }

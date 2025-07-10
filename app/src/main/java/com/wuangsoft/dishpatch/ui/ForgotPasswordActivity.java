@@ -3,6 +3,7 @@ package com.wuangsoft.dishpatch.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,16 +52,19 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 strEmail = editTextEmail.getText().toString().trim();
-                if (!TextUtils.isEmpty(strEmail)) {
-                    Resetpassword();
+
+                if (TextUtils.isEmpty(strEmail)) {
+                    editTextEmail.setError("Email field cannot be empty!");
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(strEmail).matches()) {
+                    editTextEmail.setError("Invalid email address!");
                 } else {
-                    editTextEmail.setError("Email field cannot empty!");
+                    ResetPassword();
                 }
             }
         });
     }
 
-    private void Resetpassword() {
+    private void ResetPassword() {
         mAuth.sendPasswordResetEmail(strEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -77,6 +81,5 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     }
                 });
     }
-
 
     }
