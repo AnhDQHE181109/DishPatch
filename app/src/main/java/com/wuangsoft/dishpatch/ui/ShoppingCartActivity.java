@@ -12,8 +12,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.wuangsoft.dishpatch.R;
+import com.wuangsoft.dishpatch.controllers.CartItemAdapter;
+import com.wuangsoft.dishpatch.models.CartItem;
+
+import java.util.ArrayList;
 
 public class ShoppingCartActivity extends AppCompatActivity {
 
@@ -38,6 +44,25 @@ public class ShoppingCartActivity extends AppCompatActivity {
         shoppingCartToolbar.setNavigationIcon(R.drawable.back_arrow_large);
         getSupportActionBar().setTitle(R.string.cart_title);
         shoppingCartToolbar.setNavigationOnClickListener(v -> onBackPressed());
+
+        ArrayList<CartItem> cartItems = new ArrayList<>();
+        cartItems.add(new CartItem(R.drawable.account_icon, "Pizza", "$10", "1"));
+        cartItems.add(new CartItem(R.drawable.background, "AS", "$20", "3"));
+        cartItems.add(new CartItem(R.drawable.back_arrow, "DF", "$50", "1"));
+        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
+
+        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
+        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
+        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
+        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
+        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
+        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
+        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
+
+        RecyclerView recView = findViewById(R.id.cartItemsRecView);
+        CartItemAdapter adapter = new CartItemAdapter(cartItems);
+        recView.setLayoutManager(new LinearLayoutManager(this));
+        recView.setAdapter(adapter);
 
     }
 
