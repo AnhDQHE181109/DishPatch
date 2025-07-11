@@ -1,6 +1,8 @@
 package com.wuangsoft.dishpatch.deploy;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -11,6 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.wuangsoft.dishpatch.R;
 import com.wuangsoft.dishpatch.databinding.ActivityMainBinding;
 import com.wuangsoft.dishpatch.databinding.ActivityMainDeployBinding;
+import com.wuangsoft.dishpatch.ui.ShoppingCartActivity;
 
 public class MainActivityDeploy extends AppCompatActivity {
     ActivityMainDeployBinding binding;
@@ -46,5 +49,10 @@ public class MainActivityDeploy extends AppCompatActivity {
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
     fragmentTransaction.replace(R.id.frame_layout, fragment);
     fragmentTransaction.commit();
+    }
+
+    public void goToShoppingCart(View view) {
+        Intent shoppingCartIntent = new Intent(this, ShoppingCartActivity.class);
+        startActivity(shoppingCartIntent);
     }
 }
