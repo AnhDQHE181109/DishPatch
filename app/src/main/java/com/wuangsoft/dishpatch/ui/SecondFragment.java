@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.wuangsoft.dishpatch.R;
 import com.wuangsoft.dishpatch.databinding.FragmentSecondBinding;
 
 public class SecondFragment extends Fragment {
