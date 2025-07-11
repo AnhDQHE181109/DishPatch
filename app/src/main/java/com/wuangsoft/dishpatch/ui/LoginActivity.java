@@ -73,7 +73,9 @@ public class LoginActivity extends AppCompatActivity {
                 password = editTextPassword.getText().toString().trim();
                 if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
                     Toast.makeText(LoginActivity.this, "This field must not empty!", Toast.LENGTH_SHORT).show();
-                } else {
+                }
+
+                else {
                     mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
