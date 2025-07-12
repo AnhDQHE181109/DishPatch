@@ -1,0 +1,77 @@
+package com.wuangsoft.dishpatch.utilities;
+
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.wuangsoft.dishpatch.models.CartItem;
+import com.wuangsoft.dishpatch.models.CartItemFirebase;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class DatabaseOperations {
+
+    private DatabaseReference firebaseDatabase;
+    private static final String TAG = DatabaseOperations.class.getSimpleName();
+
+    public DatabaseOperations(String userID) {
+        firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("carts").child(userID);
+    }
+
+    public void getCartItemsOnce(String userID) {
+        firebaseDatabase.child("carts").child(userID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+                else {
+                    Log.i("firebase", String.valueOf(task.getResult().getValue()));
+
+                }
+            }
+        });
+    }
+
+    public List<CartItem> getCartItems() {
+        List<CartItemFirebase> cartItemsFetched = new ArrayList<>();
+        List<CartItem> cartItems = new ArrayList<>();
+
+        ValueEventListener cartItemsListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot cartItemSnapshot : snapshot.getChildren()) {
+                    CartItemFirebase cartItemFetched = cartItemSnapshot.getValue(CartItemFirebase.class);
+//                    Log.i(TAG, cartItemFetched.toString());
+                    cartItemsFetched.add(cartItemFetched);
+                }
+//                Log.i(TAG, "cartItemsFetched" + cartItemsFetched.toString());
+
+                for (CartItemFirebase cartItemFetched : cartItemsFetched) {
+                    CartItem cartItem = new CartItem(cartItemFetched.getDishId(), cartItemFetched.getImageUrl(), cartItemFetched.getName(), cartItemFetched.getPricePerItem().toString(), cartItemFetched.getQuantity().toString());
+//                    Log.i(TAG, "cartItemFetched getPricePerItem & getQuantity: " + cartItemFetched.getPricePerItem().toString() + " "
+//                            + cartItemFetched.getQuantity().toString());
+                    cartItems.add(cartItem);
+                }
+//                Log.i(TAG, cartItems.toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "getCartItems:onCancelled", error.toException());
+            }
+        };
+        firebaseDatabase.addValueEventListener(cartItemsListener);
+
+        return cartItems;
+    }
+
+}

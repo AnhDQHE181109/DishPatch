@@ -5,24 +5,54 @@ import android.widget.TextView;
 
 public class CartItem {
 
-    private int productImage;
+    private String productID;
+    private int productImageResourceID;
+    private String productImageURL;
     private String productName;
     private String productPrice;
     private String productQuantity;
 
-    public CartItem(int productImage, String productName, String productPrice, String productQuantity) {
-        this.productImage = productImage;
+    public CartItem(int productImageResourceID, String productName, String productPrice, String productQuantity) {
+        this.productImageResourceID = productImageResourceID;
         this.productName = productName;
         this.productPrice = productPrice;
         this.productQuantity = productQuantity;
     }
 
-    public int getProductImage() {
-        return productImage;
+    public CartItem(int productImageResourceID, String productID, String productName, String productPrice, String productQuantity) {
+        this.productImageResourceID = productImageResourceID;
+        this.productID = productID;
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.productQuantity = productQuantity;
     }
 
-    public void setProductImage(int productImage) {
-        this.productImage = productImage;
+    public CartItem(String productID, String productImageURL, String productName, String productPrice, String productQuantity) {
+        this.productImageURL = productImageURL;
+        this.productID = productID;
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.productQuantity = productQuantity;
+    }
+
+    public CartItem() {
+
+    }
+
+    public int getProductImageResourceID() {
+        return productImageResourceID;
+    }
+
+    public void setProductImageResourceID(int productImage) {
+        this.productImageResourceID = productImage;
+    }
+
+    public String getProductID() {
+        return productID;
+    }
+
+    public void setProductID(String productID) {
+        this.productID = productID;
     }
 
     public String getProductName() {
@@ -52,7 +82,9 @@ public class CartItem {
     @Override
     public String toString() {
         return "CartItem{" +
-                "productImage=" + productImage +
+                "productID='" + productID + '\'' +
+                ", productImageResourceID=" + productImageResourceID +
+                ", productImageURL='" + productImageURL + '\'' +
                 ", productName='" + productName + '\'' +
                 ", productPrice='" + productPrice + '\'' +
                 ", productQuantity='" + productQuantity + '\'' +
