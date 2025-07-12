@@ -39,6 +39,14 @@ public class CartItem {
 
     }
 
+    public String getProductImageURL() {
+        return productImageURL;
+    }
+
+    public void setProductImageURL(String productImageURL) {
+        this.productImageURL = productImageURL;
+    }
+
     public int getProductImageResourceID() {
         return productImageResourceID;
     }
