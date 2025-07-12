@@ -6,6 +6,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -30,6 +33,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
 
     private static final String TAG = ShoppingCartActivity.class.getSimpleName();
     private Toolbar shoppingCartToolbar;
+    private List<CartItem> selectedCartItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
         shoppingCartToolbar.setNavigationIcon(R.drawable.back_arrow_large);
         getSupportActionBar().setTitle(R.string.cart_title);
         shoppingCartToolbar.setNavigationOnClickListener(v -> onBackPressed());
+        ((TextView)findViewById(R.id.subtotalPriceText)).setText("0₫");
 
         DatabaseOperations dbOps = new DatabaseOperations("user01");
 
@@ -60,9 +65,49 @@ public class ShoppingCartActivity extends AppCompatActivity {
             @Override
             public void onCallback(List<CartItem> cartItemsCallback) {
                 findViewById(R.id.dataWaitProgressBar).setVisibility(View.INVISIBLE);
+
                 CartItemAdapter adapter = new CartItemAdapter(cartItemsCallback);
                 recView.setAdapter(adapter);
+                adapter.setCallback(new CartItemAdapter.Callback() {
+                    @Override
+                    public void onCheckedChanged(CartItem cartItem, boolean isChecked) {
+                        if (isChecked) {
+                            selectedCartItems.add(cartItem);
+                        } else {
+                            selectedCartItems.remove(cartItem);
+                        }
+
+                        if (selectedCartItems.isEmpty()) {
+                            ((TextView)findViewById(R.id.subtotalPriceText)).setText("0₫");
+                        } else {
+                            long subtotalPrice = 0;
+                            for (CartItem selectedCartItem : selectedCartItems) {
+                                subtotalPrice += Long.parseLong(selectedCartItem.getProductPrice()) *
+                                        Long.parseLong(selectedCartItem.getProductQuantity());
+                            }
+                            ((TextView)findViewById(R.id.subtotalPriceText))
+                                    .setText(String.format("%,d", subtotalPrice).replace(',','.') + "₫");
+                        }
+//                        Log.i(TAG, "Cart item checked: " + cartItem.getProductName() + " " + isChecked);
+                    }
+                });
+
+                String cartTitle = getResources().getString(R.string.cart_title);
+                getSupportActionBar().setTitle(cartTitle + " (" + cartItemsCallback.size() + ")");
                 Log.i(TAG, "cartItems: " + cartItemsCallback.toString());
+            }
+        });
+
+        Button checkoutButton = findViewById(R.id.checkoutButton);
+        checkoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //for debugging selected cart items
+                String selectedItemsResult = "";
+                for (CartItem cartItem : selectedCartItems) {
+                    selectedItemsResult += cartItem.getProductName() + "\n";
+                }
+                Toast.makeText(ShoppingCartActivity.this, selectedItemsResult, Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -17,4 +17,7 @@
     <string name="edit_cart_list">Edit</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="all">All</string>
+    <string name="checkout">Checkout</string>
+    <string name="vnd">₫</string>
 </resources>
