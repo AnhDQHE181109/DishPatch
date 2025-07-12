@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".deploy.LoginFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+>
+
+
+        <EditText
+            android:id="@+id/fullnamebox"
+            style="@style/yellowtextbox"
+            android:ems="10"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/placeholder1"
+            app:layout_constraintTop_toBottomOf="@+id/placeholder1" />
+
+        <TextView
+            android:id="@+id/welcometext1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/league_spartan_semibold"
+            android:text="Welcome"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/welcometext2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/league_spartan"
+            android:text="To continue, please log in or sign up for a new account"
+            app:layout_constraintStart_toStartOf="@+id/welcometext1"
+            app:layout_constraintTop_toBottomOf="@+id/welcometext1" />
+
+        <TextView
+            android:id="@+id/forgetbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forget password"
+            android:textColor="@color/button_orange"
+            android:textSize="10sp"
+            app:layout_constraintEnd_toEndOf="@+id/passwordbox"
+            app:layout_constraintTop_toBottomOf="@+id/passwordbox" />
+
+        <TextView
+            android:id="@+id/placeholder1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="29dp"
+            android:fontFamily="@font/league_spartan_semibold"
+            android:imeActionLabel="Email or phone number"
+            android:labelFor="@id/fullnamebox"
+            android:text="Email or Mobile Number"
+            app:layout_constraintStart_toStartOf="@+id/welcometext1"
+            app:layout_constraintTop_toBottomOf="@+id/welcometext2" />
+
+        <TextView
+            android:id="@+id/placeholder2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/league_spartan_semibold"
+            android:imeActionLabel="Password"
+            android:labelFor="@id/passwordbox"
+            android:text="Password"
+            app:layout_constraintStart_toStartOf="@+id/welcometext1"
+            app:layout_constraintTop_toBottomOf="@+id/fullnamebox" />
+
+        <EditText
+            android:id="@+id/passwordbox"
+            style="@style/yellowtextbox"
+            android:ems="10"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/placeholder2"
+            app:layout_constraintTop_toBottomOf="@+id/placeholder2" />
+
+        <Button
+            android:id="@+id/loginbutton"
+            android:layout_width="180dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="@color/orange"
+            android:fontFamily="@font/league_spartan_medium"
+            android:text="Log In"
+            android:textSize="18sp"
+            app:cornerRadius="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordbox" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="or"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginbutton" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="88dp"
+            app:constraint_referenced_ids="textView16,switchtoSignUp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/league_spartan"
+            android:text="Don't have an account?"
+            android:textSize="12sp"
+            tools:layout_editor_absoluteX="70dp"
+            tools:layout_editor_absoluteY="552dp" />
+
+        <TextView
+            android:id="@+id/switchtoSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/league_spartan"
+            android:text=" Sign Up"
+            android:textColor="@color/orange"
+            android:textSize="12sp"
+            tools:layout_editor_absoluteX="28dp"
+            tools:layout_editor_absoluteY="552dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

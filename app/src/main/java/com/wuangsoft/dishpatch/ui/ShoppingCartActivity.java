@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -52,13 +53,19 @@ public class ShoppingCartActivity extends AppCompatActivity {
 
         DatabaseOperations dbOps = new DatabaseOperations("user01");
 
-        List<CartItem> cartItems = dbOps.getCartItems();
-        Log.i(TAG, "cartItems: " + cartItems.toString());
-
         RecyclerView recView = findViewById(R.id.cartItemsRecView);
-        CartItemAdapter adapter = new CartItemAdapter(cartItems);
         recView.setLayoutManager(new LinearLayoutManager(this));
-        recView.setAdapter(adapter);
+
+        dbOps.getCartItems(new DatabaseOperations.CartItemCallback() {
+            @Override
+            public void onCallback(List<CartItem> cartItemsCallback) {
+                findViewById(R.id.dataWaitProgressBar).setVisibility(View.INVISIBLE);
+                CartItemAdapter adapter = new CartItemAdapter(cartItemsCallback);
+                recView.setAdapter(adapter);
+                Log.i(TAG, "cartItems: " + cartItemsCallback.toString());
+            }
+        });
+
 
 //        List<CartItemFirebase> cartItemsFetched = dbOps.getCartItems();
 //        Log.i("Firebase test ", "Cart data fetched from Firebase: " + dbOps.getCartItems("user01");
