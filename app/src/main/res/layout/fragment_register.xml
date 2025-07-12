@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".deploy.LoginFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <EditText
+            android:id="@+id/signup_name"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/welcome_container"
+            android:ems="10"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/placeholder1"
+            app:layout_constraintTop_toBottomOf="@+id/placeholder1" />
+
+        <EditText
+            android:id="@+id/signup_username"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/welcome_container"
+            android:ems="10"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/placeholder"
+            app:layout_constraintTop_toBottomOf="@+id/placeholder" />
+
+        <TextView
+            android:id="@+id/welcometext1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/league_spartan_semibold"
+            android:text="New Account"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/welcometext2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/league_spartan"
+            android:text="To continue, please log in or sign up for a new account"
+            app:layout_constraintStart_toStartOf="@+id/welcometext1"
+            app:layout_constraintTop_toBottomOf="@+id/welcometext1" />
+
+        <TextView
+            android:id="@+id/placeholder1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="29dp"
+            android:fontFamily="@font/league_spartan_semibold"
+            android:imeActionLabel="Full Name"
+            android:labelFor="@id/signup_name"
+            android:text="Full name"
+            app:layout_constraintStart_toStartOf="@+id/welcometext1"
+            app:layout_constraintTop_toBottomOf="@+id/welcometext2" />
+
+        <TextView
+            android:id="@+id/placeholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/league_spartan_semibold"
+            android:imeActionLabel="User name"
+            android:labelFor="@id/signup_username"
+            android:text="Username"
+            app:layout_constraintStart_toStartOf="@+id/welcometext1"
+            app:layout_constraintTop_toBottomOf="@+id/signup_name" />
+
+        <TextView
+            android:id="@+id/placeholder3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/league_spartan_semibold"
+            android:imeActionLabel="Email"
+            android:labelFor="@id/signup_email"
+            android:text="Email"
+            app:layout_constraintStart_toStartOf="@+id/welcometext1"
+            app:layout_constraintTop_toBottomOf="@+id/signup_username" />
+
+        <TextView
+            android:id="@+id/placeholder2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/league_spartan_semibold"
+            android:imeActionLabel="Password"
+            android:labelFor="@id/signup_password"
+            android:text="Password"
+            app:layout_constraintStart_toStartOf="@+id/welcometext1"
+            app:layout_constraintTop_toBottomOf="@+id/signup_email" />
+
+        <EditText
+            android:id="@+id/signup_password"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/welcome_container"
+            android:ems="10"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/placeholder2"
+            app:layout_constraintTop_toBottomOf="@+id/placeholder2" />
+
+        <Button
+            android:id="@+id/signup_button"
+            android:layout_width="180dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="76dp"
+            android:backgroundTint="@color/orange"
+            android:fontFamily="@font/league_spartan_medium"
+            android:text="Sign Up"
+            android:textSize="18sp"
+            app:cornerRadius="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signup_password" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="or"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signup_button" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="88dp"
+            app:constraint_referenced_ids="textView16,switchtoLogin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/switchtoLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/league_spartan"
+            android:text=" Log In"
+            android:textColor="@color/orange"
+            android:textSize="12sp"
+            tools:layout_editor_absoluteX="275dp"
+            tools:layout_editor_absoluteY="488dp" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/league_spartan"
+            android:text="Already have an account?"
+            android:textSize="12sp"
+            tools:layout_editor_absoluteX="126dp"
+            tools:layout_editor_absoluteY="494dp" />
+
+        <EditText
+            android:id="@+id/signup_email"
+            style="@style/yellowtextbox"
+            android:ems="10"
+            android:inputType="textEmailAddress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/placeholder3"
+            app:layout_constraintTop_toBottomOf="@+id/placeholder3" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
