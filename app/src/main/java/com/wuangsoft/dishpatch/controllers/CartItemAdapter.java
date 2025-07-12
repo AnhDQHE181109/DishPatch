@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.wuangsoft.dishpatch.R;
 import com.wuangsoft.dishpatch.models.CartItem;
 
@@ -32,7 +33,8 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
 
     @Override
     public void onBindViewHolder(@NonNull CartItemHolder holder, int position) {
-        holder.productImage.setImageResource(cartItems.get(position).getProductImageResourceID());
+        Glide.with(holder.itemView).load(cartItems.get(position).getProductImageURL()).into(holder.productImage);
+//        holder.productImage.setImageResource(cartItems.get(position).getProductImageResourceID());
         holder.productName.setText(cartItems.get(position).getProductName());
         holder.productPrice.setText(cartItems.get(position).getProductPrice());
         holder.productQuantity.setText(cartItems.get(position).getProductQuantity());
