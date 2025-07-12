@@ -29,6 +29,11 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
         this.cartItems = cartItems;
     }
 
+    public CartItemAdapter(List<CartItem> cartItems, Callback callback) {
+        this.cartItems = cartItems;
+        this.callback = callback;
+    }
+
     @NonNull
     @Override
     public CartItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,6 +51,8 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
                 Long.parseLong(cartItems.get(position).getProductPrice())).replace(',', '.') + "₫");
         holder.productQuantity.setText(cartItems.get(position).getProductQuantity());
         holder.bindCheckboxListener();
+        holder.bindDecrementButtonListener(cartItems.get(position), callback);
+        holder.bindIncrementButtonListener(cartItems.get(position), callback);
     }
 
     @Override
@@ -59,7 +66,8 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
 
     public interface Callback {
         void onCheckedChanged(CartItem cartItem, boolean isChecked);
-
+        void onDecrementClick(CartItem cartItem);
+        void onIncrementClick(CartItem cartItem);
     }
 
     class CartItemHolder extends RecyclerView.ViewHolder {
@@ -97,11 +105,20 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             });
         }
 
-        void bindDecrementButtonListener() {
+        void bindDecrementButtonListener(CartItem cartItem, Callback callback) {
             decrementButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    if (callback != null)
+                    if (callback != null) callback.onDecrementClick(cartItem);
+                }
+            });
+        }
+
+        void bindIncrementButtonListener(CartItem cartItem, Callback callback) {
+            incrementButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (callback != null) callback.onIncrementClick(cartItem);
                 }
             });
         }

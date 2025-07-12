@@ -11,7 +11,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:contentDescription="category icon"
-        android:src="" />
+         />
 
     <TextView
         android:id="@+id/textCategory"

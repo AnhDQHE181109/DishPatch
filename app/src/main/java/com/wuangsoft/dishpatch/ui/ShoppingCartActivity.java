@@ -77,18 +77,30 @@ public class ShoppingCartActivity extends AppCompatActivity {
                             selectedCartItems.remove(cartItem);
                         }
 
-                        if (selectedCartItems.isEmpty()) {
-                            ((TextView)findViewById(R.id.subtotalPriceText)).setText("0₫");
-                        } else {
-                            long subtotalPrice = 0;
-                            for (CartItem selectedCartItem : selectedCartItems) {
-                                subtotalPrice += Long.parseLong(selectedCartItem.getProductPrice()) *
-                                        Long.parseLong(selectedCartItem.getProductQuantity());
-                            }
-                            ((TextView)findViewById(R.id.subtotalPriceText))
-                                    .setText(String.format("%,d", subtotalPrice).replace(',','.') + "₫");
-                        }
+                        calculateSubtotal();
 //                        Log.i(TAG, "Cart item checked: " + cartItem.getProductName() + " " + isChecked);
+                    }
+
+                    @Override
+                    public void onDecrementClick(CartItem cartItem) {
+                        if (Long.parseLong(cartItem.getProductQuantity()) > 1) {
+                            cartItem.setProductQuantity(String.valueOf(Long.parseLong(cartItem.getProductQuantity()) - 1));
+                            adapter.notifyDataSetChanged();
+                            calculateSubtotal();
+                        }
+
+//                        Log.i(TAG, "Cart item quantity decremented: " + (Long.parseLong(cartItem.getProductQuantity()) - 1));
+                    }
+
+                    @Override
+                    public void onIncrementClick(CartItem cartItem) {
+                        if (Long.parseLong(cartItem.getProductQuantity()) < 40) {
+                            cartItem.setProductQuantity(String.valueOf(Long.parseLong(cartItem.getProductQuantity()) + 1));
+                            adapter.notifyDataSetChanged();
+                            calculateSubtotal();
+                        }
+
+//                        Log.i(TAG, "Cart item quantity incremented: " + (Long.parseLong(cartItem.getProductQuantity()) + 1));
                     }
                 });
 
@@ -152,5 +164,19 @@ public class ShoppingCartActivity extends AppCompatActivity {
         cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
 
         return cartItems;
+    }
+
+    public void calculateSubtotal() {
+        if (selectedCartItems.isEmpty()) {
+            ((TextView)findViewById(R.id.subtotalPriceText)).setText("0₫");
+        } else {
+            long subtotalPrice = 0;
+            for (CartItem selectedCartItem : selectedCartItems) {
+                subtotalPrice += Long.parseLong(selectedCartItem.getProductPrice()) *
+                        Long.parseLong(selectedCartItem.getProductQuantity());
+            }
+            ((TextView)findViewById(R.id.subtotalPriceText))
+                    .setText(String.format("%,d", subtotalPrice).replace(',','.') + "₫");
+        }
     }
 }

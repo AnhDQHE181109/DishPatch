@@ -16,7 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:scaleType="centerCrop"
-            android:src=""
             android:contentDescription="Recommended image"/>
 
         <TextView
@@ -39,7 +38,6 @@
             android:layout_alignTop="@id/imageRecommend"
             android:layout_alignEnd="@id/imageRecommend"
             android:layout_margin="4dp"
-            android:src=""
             android:contentDescription="Favorite icon"/>
 
         <TextView
