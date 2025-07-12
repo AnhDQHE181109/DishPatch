@@ -7,49 +7,49 @@
     android:background="@color/yellow">
 
     <ImageButton
+        android:onClick="finishActivity"
         android:id="@+id/imageButton3"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="52dp"
         android:background="@color/yellow"
         android:contentDescription="back to welcome"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView2"
         app:srcCompat="@drawable/back_arrow" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginBottom="40dp"
         android:fontFamily="@font/league_spartan_semibold"
         android:text="Hello!"
         android:textColor="@color/background_white"
         android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <fragment
-        android:id="@+id/welcome_fragment"
+    <FrameLayout
+        android:id="@+id/welcomeframe"
         android:layout_width="match_parent"
-        android:layout_height="546dp"
-        android:translationZ="80dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rectangle_container"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintCircleRadius="30dp"
+        app:layout_constraintCircleRadius="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="589dp"
-        android:layout_marginTop="30dp"
-        app:layout_constraintCircleRadius="40dp"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton3"
-        app:srcCompat="@drawable/rectangle_container"
-        tools:layout_editor_absoluteX="-4dp" />
+    </FrameLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
