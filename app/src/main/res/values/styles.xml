@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="yellowtextbox">
+        <item name="android:background">@drawable/welcome_container</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+    </style>
+</resources>
