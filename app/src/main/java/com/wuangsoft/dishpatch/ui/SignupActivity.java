@@ -64,6 +64,8 @@ public class SignupActivity extends AppCompatActivity {
                 password = editPasswordRegister.getText().toString();
                 if (TextUtils.isEmpty(email) || TextUtils.isEmpty(name) || TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
                     Toast.makeText(SignupActivity.this, "The field must not Empty!", Toast.LENGTH_SHORT).show();
+                } else if (password.length() < 6) {
+                    Toast.makeText(SignupActivity.this, "Password must be at least 6 characters!", Toast.LENGTH_SHORT).show();
                 } else {
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override

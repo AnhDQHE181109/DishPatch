@@ -55,6 +55,7 @@
         android:background="@color/yellow"
         android:contentDescription="cart"
         android:scaleType="center"
+        android:onClick="goToShoppingCart"
         app:layout_constraintEnd_toStartOf="@+id/bellbutton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"

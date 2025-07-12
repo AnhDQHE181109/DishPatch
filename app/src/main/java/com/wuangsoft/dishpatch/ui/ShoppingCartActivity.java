@@ -1,9 +1,11 @@
 package com.wuangsoft.dishpatch.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -18,11 +20,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.wuangsoft.dishpatch.R;
 import com.wuangsoft.dishpatch.controllers.CartItemAdapter;
 import com.wuangsoft.dishpatch.models.CartItem;
+import com.wuangsoft.dishpatch.models.CartItemFirebase;
+import com.wuangsoft.dishpatch.utilities.DatabaseOperations;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ShoppingCartActivity extends AppCompatActivity {
 
+    private static final String TAG = ShoppingCartActivity.class.getSimpleName();
     private Toolbar shoppingCartToolbar;
 
     @Override
@@ -45,24 +51,25 @@ public class ShoppingCartActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.cart_title);
         shoppingCartToolbar.setNavigationOnClickListener(v -> onBackPressed());
 
-        ArrayList<CartItem> cartItems = new ArrayList<>();
-        cartItems.add(new CartItem(R.drawable.account_icon, "Pizza", "$10", "1"));
-        cartItems.add(new CartItem(R.drawable.background, "AS", "$20", "3"));
-        cartItems.add(new CartItem(R.drawable.back_arrow, "DF", "$50", "1"));
-        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
-
-        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
-        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
-        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
-        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
-        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
-        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
-        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
+        DatabaseOperations dbOps = new DatabaseOperations("user01");
 
         RecyclerView recView = findViewById(R.id.cartItemsRecView);
-        CartItemAdapter adapter = new CartItemAdapter(cartItems);
         recView.setLayoutManager(new LinearLayoutManager(this));
-        recView.setAdapter(adapter);
+
+        dbOps.getCartItems(new DatabaseOperations.CartItemCallback() {
+            @Override
+            public void onCallback(List<CartItem> cartItemsCallback) {
+                findViewById(R.id.dataWaitProgressBar).setVisibility(View.INVISIBLE);
+                CartItemAdapter adapter = new CartItemAdapter(cartItemsCallback);
+                recView.setAdapter(adapter);
+                Log.i(TAG, "cartItems: " + cartItemsCallback.toString());
+            }
+        });
+
+
+//        List<CartItemFirebase> cartItemsFetched = dbOps.getCartItems();
+//        Log.i("Firebase test ", "Cart data fetched from Firebase: " + dbOps.getCartItems("user01");
+//        dbOps.getCartItemsOnce("user01");
 
     }
 
@@ -81,5 +88,24 @@ public class ShoppingCartActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public List<CartItem> sampleCartItems() {
+        List<CartItem> cartItems = new ArrayList<>();
+
+        cartItems.add(new CartItem(R.drawable.account_icon, "Pizza", "$10", "1"));
+        cartItems.add(new CartItem(R.drawable.background, "AS", "$20", "3"));
+        cartItems.add(new CartItem(R.drawable.back_arrow, "DF", "$50", "1"));
+        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
+
+        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
+        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
+        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
+        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
+        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
+        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
+        cartItems.add(new CartItem(R.drawable.ic_home_black_24dp, "GG", "$60", "4"));
+
+        return cartItems;
     }
 }
