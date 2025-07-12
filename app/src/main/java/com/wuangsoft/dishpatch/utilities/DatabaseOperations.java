@@ -41,7 +41,7 @@ public class DatabaseOperations {
         });
     }
 
-    public List<CartItem> getCartItems() {
+    public void getCartItems(CartItemCallback callback) {
         List<CartItemFirebase> cartItemsFetched = new ArrayList<>();
         List<CartItem> cartItems = new ArrayList<>();
 
@@ -62,6 +62,8 @@ public class DatabaseOperations {
                     cartItems.add(cartItem);
                 }
 //                Log.i(TAG, cartItems.toString());
+
+                callback.onCallback(cartItems);
             }
 
             @Override
@@ -70,8 +72,10 @@ public class DatabaseOperations {
             }
         };
         firebaseDatabase.addValueEventListener(cartItemsListener);
+    }
 
-        return cartItems;
+    public interface CartItemCallback {
+        void onCallback(List<CartItem> cartItemsCallback);
     }
 
 }
