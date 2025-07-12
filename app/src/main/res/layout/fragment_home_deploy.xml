@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/yellow">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintCircleRadius="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        app:srcCompat="@drawable/rectangle_container" />
+
+    <ImageButton
+        android:id="@+id/accountbutton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@color/yellow"
+        android:contentDescription="account"
+        android:scaleType="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/bellbutton"
+        app:layout_constraintTop_toTopOf="@+id/searchbar"
+        app:srcCompat="@drawable/account_icon" />
+
+    <EditText
+        android:id="@+id/searchbar"
+        android:layout_width="222dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/search_container"
+        android:ems="10"
+        android:fontFamily="@font/league_spartan"
+        android:inputType="text"
+        android:paddingLeft="10dp"
+
+        android:text="Search"
+        android:textColor="#B4B4B4"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/cartbutton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@color/yellow"
+        android:contentDescription="cart"
+        android:scaleType="center"
+        android:onClick="goToShoppingCart"
+        app:layout_constraintEnd_toStartOf="@+id/bellbutton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/searchbar"
+        app:layout_constraintTop_toTopOf="@+id/searchbar"
+        app:srcCompat="@drawable/cart_icon" />
+
+    <ImageButton
+        android:id="@+id/bellbutton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@color/yellow"
+        android:contentDescription="notification"
+        android:scaleType="center"
+        app:layout_constraintEnd_toStartOf="@+id/accountbutton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/cartbutton"
+        app:layout_constraintTop_toTopOf="@+id/searchbar"
+        app:srcCompat="@drawable/bell_icon" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
