@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    android:layout_margin="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageRecommend"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_placeholder"
+            android:contentDescription="Recommended image"/>
+
+        <TextView
+            android:id="@+id/textRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5.0"
+            android:textSize="12sp"
+            android:textColor="@android:color/white"
+            android:background="@android:color/holo_red_dark"
+            android:padding="2dp"
+            android:layout_alignTop="@id/imageRecommend"
+            android:layout_alignStart="@id/imageRecommend"
+            android:layout_margin="4dp"/>
+
+        <ImageView
+            android:id="@+id/iconFavorite"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignTop="@id/imageRecommend"
+            android:layout_alignEnd="@id/imageRecommend"
+            android:layout_margin="4dp"
+            android:src="@drawable/ic_favorite"
+            android:contentDescription="Favorite icon"/>
+
+        <TextView
+            android:id="@+id/textPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="50.000đ"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:layout_below="@id/imageRecommend"
+            android:layout_margin="8dp"/>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
