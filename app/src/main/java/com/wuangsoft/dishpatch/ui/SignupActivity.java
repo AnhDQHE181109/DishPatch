@@ -70,14 +70,14 @@ public class SignupActivity extends AppCompatActivity {
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(SignupActivity.this, "Register successfully"+ mAuth.getCurrentUser().getUid().toString(), Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                Toast.makeText(SignupActivity.this, "Register failed", Toast.LENGTH_SHORT).show();
-                            }
+                        if (task.isSuccessful()) {
+                            Toast.makeText(SignupActivity.this, "Register successfully"+ mAuth.getCurrentUser().getUid().toString(), Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(SignupActivity.this, "Register failed", Toast.LENGTH_SHORT).show();
+                        }
                         }
                     });
                 }
