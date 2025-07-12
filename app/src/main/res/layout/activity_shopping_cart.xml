@@ -38,35 +38,57 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/confirmBuyForm"
         android:layout_width="match_parent"
-        android:layout_height="122dp"
-        android:background="#2B2D30"
+        android:layout_height="80dp"
+        android:background="@drawable/form_border"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintCircleRadius="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/subtotalPriceText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="28dp"
+            android:text="TextView"
+            android:textColor="@color/orange"
+            app:layout_constraintEnd_toStartOf="@+id/checkoutButton"
+            app:layout_constraintTop_toTopOf="@+id/checkoutButton" />
 
-        <TextView
-            android:id="@+id/textView4"
+        <CheckBox
+            android:id="@+id/checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView" />
-    </FrameLayout>
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/all"
+            android:buttonTint="@color/orange"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/checkoutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/orange"
+            android:text="@string/checkout"
+            app:cornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/dataWaitProgressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
+        app:layout_constraintBottom_toTopOf="@+id/confirmBuyForm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/cartItemsRecView"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
