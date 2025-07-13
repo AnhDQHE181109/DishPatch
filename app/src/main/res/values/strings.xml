@@ -29,4 +29,12 @@
     <string name="all">All</string>
     <string name="checkout">Checkout</string>
     <string name="vnd">₫</string>
+
+    <!-- Order Confirmation -->
+    <string name="order_confirmed_title">Order Confirmed!</string>
+    <string name="order_confirmed_message">Your order has been placed successfully</string>
+    <string name="order_delivery_info">Delivery by Thu, 29th, 4:00 PM</string>
+    <string name="track_my_order">Track my order</string>
+    <string name="support_message">If you have any questions, please reach out\ndirectly to our customer support</string>
+    <string name="back_button_description">Back</string>
 </resources>
