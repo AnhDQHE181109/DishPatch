@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.wuangsoft.dishpatch.R;
 import com.wuangsoft.dishpatch.databinding.ActivityLoginBinding;
+import com.wuangsoft.dishpatch.ui.home.HomeFragment;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -185,12 +186,18 @@ public class LoginFragment extends Fragment {
                                     accountType = "Admin";
                                 } else if (roleId == 2) {
                                     accountType = "Customer";
+
                                 } else {
                                     accountType = "Guest";
                                 }
-                            }
-                            Toast.makeText(getContext(), "Login success - " + accountType, Toast.LENGTH_SHORT).show();
 
+                            Toast.makeText(getContext(), "Login success - " + accountType, Toast.LENGTH_SHORT).show();
+                            if (getActivity() instanceof WelcomePage) {
+                                ((WelcomePage) getActivity()).replaceFragment(new HomeFragment());
+                            }
+                        } else {
+                            Toast.makeText(getContext(), "Login failed - roleId not found", Toast.LENGTH_SHORT).show();
+                        }
                         }
                     }
 
