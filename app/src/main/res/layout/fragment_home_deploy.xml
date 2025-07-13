@@ -44,6 +44,7 @@
         android:background="@color/yellow"
         android:contentDescription="cart"
         android:scaleType="center"
+        android:onClick="goToShoppingCart"
         app:layout_constraintTop_toTopOf="@id/searchbar"
         app:layout_constraintEnd_toStartOf="@id/bellbutton"
         app:srcCompat="@drawable/cart_icon" />

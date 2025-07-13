@@ -26,4 +26,7 @@
     <string name="order_empty_icon">Empty order icon</string>
 
 
+    <string name="all">All</string>
+    <string name="checkout">Checkout</string>
+    <string name="vnd">₫</string>
 </resources>
