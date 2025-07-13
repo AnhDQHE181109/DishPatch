@@ -37,4 +37,19 @@
     <string name="track_my_order">Track my order</string>
     <string name="support_message">If you have any questions, please reach out\ndirectly to our customer support</string>
     <string name="back_button_description">Back</string>
+
+    <!-- Payment Confirm -->
+    <string name="payment">Payment</string>
+    <string name="back">Back to previous screen</string>
+    <string name="shipping_address">Shipping Address</string>
+    <string name="delivery_address_example">778 Locust View Drive Oaklanda, CA</string>
+    <string name="order_summary">Order Summary</string>
+    <string name="product_names">Strawberry Shake\nBroccoli Lasagna</string>
+    <string name="total_price">60.000đ</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="credit_card_number">•••• •••• •••• 4300</string>
+    <string name="delivery_time">Delivery Time</string>
+    <string name="delivery_time_value">25 mins</string>
+    <string name="pay_now">Pay Now</string>
+
 </resources>

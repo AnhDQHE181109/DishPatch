@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/yellow"
+    tools:context=".ui.PaymentConfirmFragment">
+
+    <!-- Back Button -->
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="52dp"
+        android:background="@color/yellow"
+        android:contentDescription="@string/back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/back_arrow" />
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/payment"
+        android:textColor="@color/background_white"
+        android:textSize="24sp"
+        android:fontFamily="@font/league_spartan_semibold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="56dp" />
+
+    <!-- White Container -->
+    <FrameLayout
+        android:id="@+id/paymentFrame"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/rectangle_container"
+        app:layout_constraintTop_toTopOf="@id/guideline"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Shipping Address -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shipping_address"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/delivery_address_example"
+                android:background="@color/light_yellow"
+                android:padding="12dp"
+                android:layout_marginTop="6dp" />
+
+            <!-- Order Summary -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/order_summary"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/product_names"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="@string/total_price"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <!-- Payment Method -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/payment_method"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/credit_card_number"
+                android:background="@color/light_yellow"
+                android:padding="12dp" />
+
+            <!-- Delivery Time -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/delivery_time"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/delivery_time_value"
+                android:textColor="@color/orange"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+
+            <!-- Pay Now Button -->
+            <Button
+                android:id="@+id/btnPayNow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/pay_now"
+                android:backgroundTint="@color/orange"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <fragment
+        android:id="@+id/welcome_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="546dp"
+        android:translationZ="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintCircleRadius="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <!-- Top Guideline for Container -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
