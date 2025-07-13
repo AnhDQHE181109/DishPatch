@@ -63,11 +63,12 @@ public class ShoppingCartActivity extends AppCompatActivity {
 
         dbOps.getCartItems(new DatabaseOperations.CartItemCallback() {
             @Override
-            public void onCallback(List<CartItem> cartItemsCallback) {
+            public void onCallbackGetCartItems(List<CartItem> cartItemsCallback) {
                 findViewById(R.id.dataWaitProgressBar).setVisibility(View.INVISIBLE);
 
                 CartItemAdapter adapter = new CartItemAdapter(cartItemsCallback);
                 recView.setAdapter(adapter);
+
                 adapter.setCallback(new CartItemAdapter.Callback() {
                     @Override
                     public void onCheckedChanged(CartItem cartItem, boolean isChecked) {
@@ -83,8 +84,10 @@ public class ShoppingCartActivity extends AppCompatActivity {
 
                     @Override
                     public void onDecrementClick(CartItem cartItem) {
-                        if (Long.parseLong(cartItem.getProductQuantity()) > 1) {
+                        long currentQuantity = Long.parseLong(cartItem.getProductQuantity());
+                        if (currentQuantity > 1) {
                             cartItem.setProductQuantity(String.valueOf(Long.parseLong(cartItem.getProductQuantity()) - 1));
+                            dbOps.updateCartItemQuantity(cartItem, currentQuantity - 1);
                             adapter.notifyDataSetChanged();
                             calculateSubtotal();
                         }
@@ -94,8 +97,10 @@ public class ShoppingCartActivity extends AppCompatActivity {
 
                     @Override
                     public void onIncrementClick(CartItem cartItem) {
-                        if (Long.parseLong(cartItem.getProductQuantity()) < 40) {
+                        long currentQuantity = Long.parseLong(cartItem.getProductQuantity());
+                        if (currentQuantity < 40) {
                             cartItem.setProductQuantity(String.valueOf(Long.parseLong(cartItem.getProductQuantity()) + 1));
+                            dbOps.updateCartItemQuantity(cartItem, currentQuantity + 1);
                             adapter.notifyDataSetChanged();
                             calculateSubtotal();
                         }
