@@ -105,7 +105,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/credit_card_number"
+                android:text="@string/cash_on_delivery"
                 android:background="@color/light_yellow"
                 android:padding="12dp" />
 
@@ -141,16 +141,6 @@
         </LinearLayout>
     </FrameLayout>
 
-    <fragment
-        android:id="@+id/welcome_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="546dp"
-        android:translationZ="80dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintCircleRadius="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"/>
 
     <!-- Top Guideline for Container -->
     <androidx.constraintlayout.widget.Guideline

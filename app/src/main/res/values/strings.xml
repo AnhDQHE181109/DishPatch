@@ -47,7 +47,7 @@
     <string name="product_names">Strawberry Shake\nBroccoli Lasagna</string>
     <string name="total_price">60.000đ</string>
     <string name="payment_method">Payment Method</string>
-    <string name="credit_card_number">•••• •••• •••• 4300</string>
+    <string name="cash_on_delivery">Cash on Delivery</string>
     <string name="delivery_time">Delivery Time</string>
     <string name="delivery_time_value">25 mins</string>
     <string name="pay_now">Pay Now</string>
