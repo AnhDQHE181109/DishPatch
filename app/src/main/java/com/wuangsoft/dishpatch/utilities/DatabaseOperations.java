@@ -48,6 +48,9 @@ public class DatabaseOperations {
         ValueEventListener cartItemsListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                cartItemsFetched.clear();
+                cartItems.clear();
+
                 for (DataSnapshot cartItemSnapshot : snapshot.getChildren()) {
                     CartItemFirebase cartItemFetched = cartItemSnapshot.getValue(CartItemFirebase.class);
 //                    Log.i(TAG, cartItemFetched.toString());
@@ -63,7 +66,7 @@ public class DatabaseOperations {
                 }
 //                Log.i(TAG, cartItems.toString());
 
-                callback.onCallback(cartItems);
+                callback.onCallbackGetCartItems(cartItems);
             }
 
             @Override
@@ -74,8 +77,40 @@ public class DatabaseOperations {
         firebaseDatabase.addValueEventListener(cartItemsListener);
     }
 
+    public void updateCartItemQuantity(CartItem cartItem, Long newQuantity) {
+        List<String> cartItemsList = new ArrayList<>();
+
+//        firebaseDatabase.child(cartItem.getProductID()).child("quantity").setValue(newQuantity);
+        firebaseDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot cartItemSnapshot : snapshot.getChildren()) {
+                    //debug fetching cartItems' keys
+//                    cartItemsList.add(cartItemSnapshot.getKey());
+
+                    CartItemFirebase cartItemFetched = cartItemSnapshot.getValue(CartItemFirebase.class);
+                    if (cartItemFetched.getDishId().equalsIgnoreCase(cartItem.getProductID())) {
+                        firebaseDatabase.child(cartItemSnapshot.getKey()).child("quantity").setValue(newQuantity);
+                    }
+//                    Log.i(TAG, "updateCartItemQuantity:onDataChange: \n" +
+//                            "dishId: " + cartItemFetched.getDishId() + "\n" +
+//                            "cartItem.getProductName(): " + cartItem.getProductName());
+
+                }
+//                Log.i(TAG, "cartItemsList: " + cartItemsList.toString());
+//                callback.onCallbackUpdateItemQuantity(cartItemsList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "updateCartItemQuantity:onCancelled", error.toException());
+            }
+        });
+    }
+
     public interface CartItemCallback {
-        void onCallback(List<CartItem> cartItemsCallback);
+        void onCallbackGetCartItems(List<CartItem> cartItemsCallback);
+//        void onCallbackUpdateItemQuantity(List<String> cartItemsList);
     }
 
 }

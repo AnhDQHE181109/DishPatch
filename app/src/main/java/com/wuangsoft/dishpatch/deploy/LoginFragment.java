@@ -1,7 +1,9 @@
 package com.wuangsoft.dishpatch.deploy;
 
+
 import android.app.AlertDialog;
 import android.content.Intent;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,6 +32,10 @@ import com.wuangsoft.dishpatch.ui.home.HomeFragment;
 import java.util.HashMap;
 import java.util.Objects;
 
+import android.widget.TextView;
+
+import com.wuangsoft.dishpatch.R;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link LoginFragment#newInstance} factory method to
@@ -37,12 +43,10 @@ import java.util.Objects;
  */
 public class LoginFragment extends Fragment {
 
-
     private FirebaseAuth firebaseAuth;
     private EditText editTextEmail, editTextPassword;
     private Button loginButton;
     private TextView signUpTextView, forgetPasswordTextView;
-
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -88,8 +92,6 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
     @Override
@@ -108,6 +110,14 @@ public class LoginFragment extends Fragment {
 
         // Navigate to RegisterFragment
         signUpTextView.setOnClickListener(v -> {
+
+        TextView signUpTextView = view.findViewById(R.id.switchtoSignUp);
+        TextView forgetTextView = view.findViewById(R.id.forgetbutton);
+
+        // --- Set Click Listeners ---
+
+        signUpTextView.setOnClickListener(v -> {
+            // Navigate to RegisterFragment
             if (getActivity() instanceof WelcomePage) {
                 ((WelcomePage) getActivity()).replaceFragment(new RegisterFragment());
             }
@@ -115,6 +125,8 @@ public class LoginFragment extends Fragment {
 
         // Navigate to ForgetPasswordFragment
         forgetPasswordTextView.setOnClickListener(v -> {
+        forgetTextView.setOnClickListener(v -> {
+            // Navigate to RegisterFragment
             if (getActivity() instanceof WelcomePage) {
                 ((WelcomePage) getActivity()).replaceFragment(new ForgetPasswordFragment());
             }
@@ -207,4 +219,6 @@ public class LoginFragment extends Fragment {
                     }
                 });
     }
+    }
+
 }

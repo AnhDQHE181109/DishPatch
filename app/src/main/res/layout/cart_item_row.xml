@@ -11,8 +11,9 @@
         android:id="@+id/productImage"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="64dp"
         android:layout_marginTop="16dp"
+        app:layout_constraintStart_toEndOf="@+id/checkBox2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
@@ -36,27 +37,22 @@
         app:layout_constraintStart_toStartOf="@+id/productName"
         app:layout_constraintTop_toBottomOf="@+id/productName" />
 
-    <TextView
-        android:id="@+id/productQuantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1" />
-
-    <Button
+    <ImageButton
         android:id="@+id/decrementButton"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:backgroundTint="@color/white"
-        android:text="-"
-        app:cornerRadius="0dp" />
+        android:background="@drawable/square_borders"
+        app:srcCompat="@drawable/minus_item"
+        tools:layout_editor_absoluteX="258dp"
+        tools:layout_editor_absoluteY="43dp" />
 
-    <Button
-        android:id="@+id/increment_button"
+    <TextView
+        android:id="@+id/productQuantity"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:backgroundTint="@color/white"
-        android:text="+"
-        app:cornerRadius="0dp" />
+        android:textAlignment="center"
+        android:text="1" />
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/flow3"
@@ -64,8 +60,27 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
         android:layout_marginEnd="36dp"
-        app:constraint_referenced_ids="decrementButton,productQuantity,increment_button"
+        app:constraint_referenced_ids="decrementButton,productQuantity,incrementButton"
         app:layout_constraintCircleRadius="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/cartItemCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/productImage" />
+
+    <ImageButton
+        android:id="@+id/incrementButton"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:backgroundTint="@color/white"
+        android:background="@drawable/square_borders"
+        app:srcCompat="@drawable/plus_item"
+        tools:layout_editor_absoluteX="283dp"
+        tools:layout_editor_absoluteY="32dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

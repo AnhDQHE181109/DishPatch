@@ -13,7 +13,11 @@
 
 
         <EditText
+
             android:id="@+id/login_email"
+
+            android:id="@+id/fullnamebox"
+
             style="@style/yellowtextbox"
             android:ems="10"
             android:inputType="text"
@@ -51,8 +55,13 @@
             android:text="Forget password"
             android:textColor="@color/button_orange"
             android:textSize="10sp"
+
             app:layout_constraintEnd_toEndOf="@+id/login_password"
             app:layout_constraintTop_toBottomOf="@+id/login_password" />
+
+            app:layout_constraintEnd_toEndOf="@+id/passwordbox"
+            app:layout_constraintTop_toBottomOf="@+id/passwordbox" />
+
 
         <TextView
             android:id="@+id/placeholder1"
@@ -61,8 +70,13 @@
             android:layout_marginTop="29dp"
             android:fontFamily="@font/league_spartan_semibold"
             android:imeActionLabel="Email or phone number"
+
             android:labelFor="@id/login_email"
             android:text="Email"
+
+            android:labelFor="@id/fullnamebox"
+            android:text="Email or Mobile Number"
+
             app:layout_constraintStart_toStartOf="@+id/welcometext1"
             app:layout_constraintTop_toBottomOf="@+id/welcometext2" />
 
@@ -73,6 +87,7 @@
             android:layout_marginTop="20dp"
             android:fontFamily="@font/league_spartan_semibold"
             android:imeActionLabel="Password"
+
             android:labelFor="@id/login_password"
             android:text="Password"
             app:layout_constraintStart_toStartOf="@+id/welcometext1"
@@ -80,6 +95,15 @@
 
         <EditText
             android:id="@+id/login_password"
+
+            android:labelFor="@id/passwordbox"
+            android:text="Password"
+            app:layout_constraintStart_toStartOf="@+id/welcometext1"
+            app:layout_constraintTop_toBottomOf="@+id/fullnamebox" />
+
+        <EditText
+            android:id="@+id/passwordbox"
+
             style="@style/yellowtextbox"
             android:ems="10"
             android:inputType="textPassword"
@@ -89,7 +113,11 @@
             app:layout_constraintTop_toBottomOf="@+id/placeholder2" />
 
         <Button
+
             android:id="@+id/login_button"
+
+            android:id="@+id/loginbutton"
+
             android:layout_width="180dp"
             android:layout_height="48dp"
             android:layout_marginTop="30dp"
@@ -100,7 +128,11 @@
             app:cornerRadius="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+
             app:layout_constraintTop_toBottomOf="@+id/login_password" />
+
+            app:layout_constraintTop_toBottomOf="@+id/passwordbox" />
+
 
         <TextView
             android:id="@+id/textView15"
@@ -111,7 +143,11 @@
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+
             app:layout_constraintTop_toBottomOf="@+id/login_button" />
+
+            app:layout_constraintTop_toBottomOf="@+id/loginbutton" />
+
 
         <androidx.constraintlayout.helper.widget.Flow
             android:layout_width="wrap_content"

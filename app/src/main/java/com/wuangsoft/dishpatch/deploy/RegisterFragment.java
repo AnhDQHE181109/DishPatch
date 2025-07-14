@@ -1,6 +1,8 @@
 package com.wuangsoft.dishpatch.deploy;
 
+
 import android.app.AlertDialog;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -37,6 +39,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.wuangsoft.dishpatch.R;
 
 import java.util.HashMap;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.wuangsoft.dishpatch.R;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,10 +53,12 @@ import java.util.HashMap;
  */
 public class RegisterFragment extends Fragment {
 
+
     private Button btnCreate;
     private EditText editEmailRegister, editNameRegister, editUsernameRegister, editPasswordRegister;
     private FirebaseAuth mAuth;
     private String name, email, username, password;
+
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -96,13 +106,12 @@ public class RegisterFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-
-
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         mAuth = FirebaseAuth.getInstance();
         editNameRegister = view.findViewById(R.id.signup_name);
         editEmailRegister = view.findViewById(R.id.signup_email);
@@ -112,12 +121,19 @@ public class RegisterFragment extends Fragment {
         TextView LoginTextView = view.findViewById(R.id.switchtoLogin);
 
         // --- Set Click Listeners ---
+
+        TextView LoginTextView = view.findViewById(R.id.switchtoLogin);
+
+        // --- Set Click Listeners ---
+
+
         LoginTextView.setOnClickListener(v -> {
             // Navigate to RegisterFragment
             if (getActivity() instanceof WelcomePage) {
                 ((WelcomePage) getActivity()).replaceFragment(new LoginFragment());
             }
         });
+
 
         btnCreate.setOnClickListener(v -> {
             name = editNameRegister.getText().toString().trim();
@@ -197,3 +213,7 @@ public class RegisterFragment extends Fragment {
     }
 
     }
+
+    }
+}
+

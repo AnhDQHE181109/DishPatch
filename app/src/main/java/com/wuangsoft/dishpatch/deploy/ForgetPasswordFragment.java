@@ -1,6 +1,8 @@
 package com.wuangsoft.dishpatch.deploy;
 
+
 import android.app.AlertDialog;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,12 +12,16 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+
+import android.widget.TextView;
+
 import com.wuangsoft.dishpatch.R;
 
 /**
@@ -76,11 +82,13 @@ public class ForgetPasswordFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         TextView LoginTextView = view.findViewById(R.id.switchtoLogin);
 
+
         TextView backToLoginTextView = view.findViewById(R.id.switchtoLogin);
         EditText emailEditText = view.findViewById(R.id.forgot_email);
         Button resetPasswordButton = view.findViewById(R.id.submit_button);
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
 
         // --- Set Click Listeners ---
 
