@@ -37,8 +37,8 @@ public class OrdersDeployFragment extends Fragment {
         btnActive = view.findViewById(R.id.btnActive);
         btnCompleted = view.findViewById(R.id.btnCompleted);
         btnCancelled = view.findViewById(R.id.btnCancelled);
-        recyclerViewOrders = view.findViewById(R.id.recyclerViewOrders);
-        emptyLayout = view.findViewById(R.id.emptyLayout);
+//        recyclerViewOrders = view.findViewById(R.id.recyclerViewOrders);
+//        emptyLayout = view.findViewById(R.id.emptyLayout);
 
         // Gán listener cho nút lọc
         btnActive.setOnClickListener(v -> loadOrders("pending"));
