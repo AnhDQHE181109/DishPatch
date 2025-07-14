@@ -193,7 +193,7 @@ public class LoginFragment extends Fragment {
 
                             Toast.makeText(getContext(), "Login success - " + accountType, Toast.LENGTH_SHORT).show();
                             if (getActivity() instanceof WelcomePage) {
-                                ((WelcomePage) getActivity()).replaceFragment(new HomeFragment());
+                                ((WelcomePage) getActivity()).replaceFragment(new HomeDeployFragment());
                             }
                         } else {
                             Toast.makeText(getContext(), "Login failed - roleId not found", Toast.LENGTH_SHORT).show();
