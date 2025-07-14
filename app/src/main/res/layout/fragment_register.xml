@@ -12,11 +12,7 @@
 
 
         <EditText
-
-            android:id="@+id/signup_name"
-
             android:id="@+id/fullnamebox"
-
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginEnd="20dp"
@@ -29,11 +25,7 @@
             app:layout_constraintTop_toBottomOf="@+id/placeholder1" />
 
         <EditText
-
-            android:id="@+id/signup_username"
-
             android:id="@+id/usernamebox"
-
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginEnd="20dp"
@@ -74,11 +66,7 @@
             android:layout_marginTop="29dp"
             android:fontFamily="@font/league_spartan_semibold"
             android:imeActionLabel="Full Name"
-
-            android:labelFor="@id/signup_name"
-
             android:labelFor="@id/fullnamebox"
-
             android:text="Full name"
             app:layout_constraintStart_toStartOf="@+id/welcometext1"
             app:layout_constraintTop_toBottomOf="@+id/welcometext2" />
@@ -90,17 +78,10 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/league_spartan_semibold"
             android:imeActionLabel="User name"
-
-            android:labelFor="@id/signup_username"
-            android:text="Username"
-            app:layout_constraintStart_toStartOf="@+id/welcometext1"
-            app:layout_constraintTop_toBottomOf="@+id/signup_name" />
-
             android:labelFor="@id/usernamebox"
             android:text="Username"
             app:layout_constraintStart_toStartOf="@+id/welcometext1"
             app:layout_constraintTop_toBottomOf="@+id/fullnamebox" />
-
 
         <TextView
             android:id="@+id/placeholder3"
@@ -109,17 +90,10 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/league_spartan_semibold"
             android:imeActionLabel="Email"
-
-            android:labelFor="@id/signup_email"
-            android:text="Email"
-            app:layout_constraintStart_toStartOf="@+id/welcometext1"
-            app:layout_constraintTop_toBottomOf="@+id/signup_username" />
-
             android:labelFor="@id/emailbox"
             android:text="Email"
             app:layout_constraintStart_toStartOf="@+id/welcometext1"
             app:layout_constraintTop_toBottomOf="@+id/usernamebox" />
-
 
         <TextView
             android:id="@+id/placeholder2"
@@ -128,15 +102,6 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/league_spartan_semibold"
             android:imeActionLabel="Password"
-
-            android:labelFor="@id/signup_password"
-            android:text="Password"
-            app:layout_constraintStart_toStartOf="@+id/welcometext1"
-            app:layout_constraintTop_toBottomOf="@+id/signup_email" />
-
-        <EditText
-            android:id="@+id/signup_password"
-
             android:labelFor="@id/passwordbox"
             android:text="Password"
             app:layout_constraintStart_toStartOf="@+id/welcometext1"
@@ -144,7 +109,6 @@
 
         <EditText
             android:id="@+id/passwordbox"
-
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginEnd="20dp"
@@ -157,11 +121,7 @@
             app:layout_constraintTop_toBottomOf="@+id/placeholder2" />
 
         <Button
-
-            android:id="@+id/signup_button"
-
             android:id="@+id/loginbutton"
-
             android:layout_width="180dp"
             android:layout_height="48dp"
             android:layout_marginTop="76dp"
@@ -173,11 +133,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-
-            app:layout_constraintTop_toBottomOf="@+id/signup_password" />
-
             app:layout_constraintTop_toBottomOf="@+id/passwordbox" />
-
 
         <TextView
             android:id="@+id/textView15"
@@ -189,11 +145,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-
-            app:layout_constraintTop_toBottomOf="@+id/signup_button" />
-
             app:layout_constraintTop_toBottomOf="@+id/loginbutton" />
-
 
         <androidx.constraintlayout.helper.widget.Flow
             android:layout_width="wrap_content"
@@ -226,11 +178,7 @@
             tools:layout_editor_absoluteY="494dp" />
 
         <EditText
-
-            android:id="@+id/signup_email"
-
             android:id="@+id/emailbox"
-
             style="@style/yellowtextbox"
             android:ems="10"
             android:inputType="textEmailAddress"

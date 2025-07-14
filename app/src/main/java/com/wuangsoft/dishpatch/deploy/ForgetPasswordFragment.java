@@ -1,8 +1,5 @@
 package com.wuangsoft.dishpatch.deploy;
 
-
-import android.app.AlertDialog;
-
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,14 +9,6 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
-
 import android.widget.TextView;
 
 import com.wuangsoft.dishpatch.R;
@@ -82,14 +71,6 @@ public class ForgetPasswordFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         TextView LoginTextView = view.findViewById(R.id.switchtoLogin);
 
-
-        TextView backToLoginTextView = view.findViewById(R.id.switchtoLogin);
-        EditText emailEditText = view.findViewById(R.id.forgot_email);
-        Button resetPasswordButton = view.findViewById(R.id.submit_button);
-
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-
-
         // --- Set Click Listeners ---
 
         LoginTextView.setOnClickListener(v -> {
@@ -97,26 +78,6 @@ public class ForgetPasswordFragment extends Fragment {
             if (getActivity() instanceof WelcomePage) {
                 ((WelcomePage) getActivity()).replaceFragment(new LoginFragment());
             }
-        });
-
-        resetPasswordButton.setOnClickListener(v -> {
-            String email = emailEditText.getText().toString().trim();
-            if (email.isEmpty()) {
-                emailEditText.setError("Email cannot be empty");
-                return;
-            }
-
-            firebaseAuth.sendPasswordResetEmail(email)
-                    .addOnSuccessListener(unused -> {
-                        Toast.makeText(requireContext(),
-                                "A password reset link has been sent to your email.",
-                                Toast.LENGTH_LONG).show();
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(requireContext(),
-                                "Error: " + e.getMessage(),
-                                Toast.LENGTH_LONG).show();
-                    });
         });
     }
 }
