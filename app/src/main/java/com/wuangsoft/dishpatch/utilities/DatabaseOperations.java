@@ -48,6 +48,7 @@ public class DatabaseOperations {
         ValueEventListener cartItemsListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                Log.i("DBOps: getCartItems", "onDataChange invoked");
                 cartItemsFetched.clear();
                 cartItems.clear();
 
@@ -74,7 +75,8 @@ public class DatabaseOperations {
                 Log.w(TAG, "getCartItems:onCancelled", error.toException());
             }
         };
-        firebaseDatabase.addValueEventListener(cartItemsListener);
+//        firebaseDatabase.addValueEventListener(cartItemsListener);
+        firebaseDatabase.addListenerForSingleValueEvent(cartItemsListener);
     }
 
     public void updateCartItemQuantity(CartItem cartItem, Long newQuantity) {
@@ -84,6 +86,7 @@ public class DatabaseOperations {
         firebaseDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                Log.i("DBOps: updateCartItemQuantity", "onDataChange invoked");
                 for (DataSnapshot cartItemSnapshot : snapshot.getChildren()) {
                     //debug fetching cartItems' keys
 //                    cartItemsList.add(cartItemSnapshot.getKey());

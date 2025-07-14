@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.wuangsoft.dishpatch.R;
 import com.wuangsoft.dishpatch.controllers.CartItemAdapter;
 import com.wuangsoft.dishpatch.models.CartItem;
-import com.wuangsoft.dishpatch.models.CartItemFirebase;
 import com.wuangsoft.dishpatch.utilities.DatabaseOperations;
 
 import java.util.ArrayList;
@@ -60,14 +59,16 @@ public class ShoppingCartActivity extends AppCompatActivity {
 
         RecyclerView recView = findViewById(R.id.cartItemsRecView);
         recView.setLayoutManager(new LinearLayoutManager(this));
+        CartItemAdapter adapter = new CartItemAdapter(new ArrayList<>());
+        recView.setAdapter(adapter);
 
         dbOps.getCartItems(new DatabaseOperations.CartItemCallback() {
             @Override
             public void onCallbackGetCartItems(List<CartItem> cartItemsCallback) {
                 findViewById(R.id.dataWaitProgressBar).setVisibility(View.INVISIBLE);
 
-                CartItemAdapter adapter = new CartItemAdapter(cartItemsCallback);
-                recView.setAdapter(adapter);
+                adapter.setCartItems(cartItemsCallback);
+                adapter.notifyDataSetChanged();
 
                 adapter.setCallback(new CartItemAdapter.Callback() {
                     @Override
@@ -82,6 +83,15 @@ public class ShoppingCartActivity extends AppCompatActivity {
 //                        Log.i(TAG, "Cart item checked: " + cartItem.getProductName() + " " + isChecked);
                     }
 
+//                    @Override
+//                    public void onClick(CartItem cartItem) {
+//                        if (selectedCartItems.contains(cartItem)) {
+//                            selectedCartItems.remove(cartItem);
+//                        } else {
+//                            selectedCartItems.add(cartItem);
+//                        }
+//                    }
+
                     @Override
                     public void onDecrementClick(CartItem cartItem) {
                         long currentQuantity = Long.parseLong(cartItem.getProductQuantity());
@@ -90,6 +100,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
                             dbOps.updateCartItemQuantity(cartItem, currentQuantity - 1);
                             adapter.notifyDataSetChanged();
                             calculateSubtotal();
+//                            selectedCartItems.clear();
                         }
 
 //                        Log.i(TAG, "Cart item quantity decremented: " + (Long.parseLong(cartItem.getProductQuantity()) - 1));
@@ -103,6 +114,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
                             dbOps.updateCartItemQuantity(cartItem, currentQuantity + 1);
                             adapter.notifyDataSetChanged();
                             calculateSubtotal();
+//                            selectedCartItems.clear();
                         }
 
 //                        Log.i(TAG, "Cart item quantity incremented: " + (Long.parseLong(cartItem.getProductQuantity()) + 1));
@@ -179,6 +191,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
             for (CartItem selectedCartItem : selectedCartItems) {
                 subtotalPrice += Long.parseLong(selectedCartItem.getProductPrice()) *
                         Long.parseLong(selectedCartItem.getProductQuantity());
+//                Log.i(TAG, "product quantity: " + selectedCartItem.getProductQuantity());
             }
             ((TextView)findViewById(R.id.subtotalPriceText))
                     .setText(String.format("%,d", subtotalPrice).replace(',','.') + "₫");

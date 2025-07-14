@@ -1,5 +1,7 @@
 package com.wuangsoft.dishpatch.controllers;
 
+import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
 
     List<CartItem> cartItems;
     private Callback callback;
+    private SparseBooleanArray itemsStateArray = new SparseBooleanArray();
 
     public CartItemAdapter(List<CartItem> cartItems) {
         this.cartItems = cartItems;
@@ -34,10 +37,23 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
         this.callback = callback;
     }
 
+    public List<CartItem> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
+    }
+
     @NonNull
     @Override
     public CartItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cart_item_row, parent, false);
+
+//        for (int i = 0; i < cartItems.size(); i++) {
+//            itemsStateArray.put(i, false);
+//        }
+//        Log.i("CartItemAdapter: ", itemsStateArray.toString());
 
         return new CartItemHolder(v);
     }
@@ -50,7 +66,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
         holder.productPrice.setText(String.format("%,d",
                 Long.parseLong(cartItems.get(position).getProductPrice())).replace(',', '.') + "₫");
         holder.productQuantity.setText(cartItems.get(position).getProductQuantity());
-        holder.bindCheckboxListener();
+        holder.bindCheckboxListener(position);
         holder.bindDecrementButtonListener(cartItems.get(position), callback);
         holder.bindIncrementButtonListener(cartItems.get(position), callback);
     }
@@ -66,6 +82,8 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
 
     public interface Callback {
         void onCheckedChanged(CartItem cartItem, boolean isChecked);
+//        void onClick(CartItem cartItem);
+
         void onDecrementClick(CartItem cartItem);
         void onIncrementClick(CartItem cartItem);
     }
@@ -90,7 +108,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             incrementButton = itemView.findViewById(R.id.incrementButton);
         }
 
-        void bindCheckboxListener() {
+        void bindCheckboxListener(int position) {
 //            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
 //                if (callback != null) {
 //                    callback.onCheckedChanged(cartItems.get(getAdapterPosition()), isChecked);
@@ -100,9 +118,45 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                    int adapterPosition = getAdapterPosition();
+//
+//                    if (!itemsStateArray.get(adapterPosition) && isChecked) {
+//                        itemsStateArray.put(adapterPosition, true);
+//                    } else if (itemsStateArray.get(adapterPosition) && !isChecked) {
+//                        itemsStateArray.put(adapterPosition, false);
+//                    }
+
+                    itemsStateArray.put(getAdapterPosition(), isChecked);
                     if (callback != null) callback.onCheckedChanged(cartItems.get(getAdapterPosition()), isChecked);
+
                 }
             });
+
+//            checkBox.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    int adapterPosition = getAdapterPosition();
+//                    if (!itemsStateArray.get(adapterPosition, false)) {
+//                        checkBox.setChecked(true);
+//                        itemsStateArray.put(adapterPosition, true);
+//                    }
+//                    else  {
+//                        checkBox.setChecked(false);
+//                        itemsStateArray.put(adapterPosition, false);
+//                    }
+//
+////                    if (callback != null) callback.onCheckedChanged(cartItems.get(getAdapterPosition()), isChecked);
+//                }
+//            });
+
+//            if (itemsStateArray.get(position)) {
+//                checkBox.setChecked(true);
+//            } else {
+//                checkBox.setChecked(false);
+//            }
+
+            checkBox.setChecked(itemsStateArray.get(getAdapterPosition()));
+
         }
 
         void bindDecrementButtonListener(CartItem cartItem, Callback callback) {
