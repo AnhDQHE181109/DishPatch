@@ -29,6 +29,7 @@
     <string name="all">All</string>
     <string name="checkout">Checkout</string>
     <string name="vnd">₫</string>
+    <string name="delete">Delete</string>
 
     <!-- Order Confirmation -->
     <string name="order_confirmed_title">Order Confirmed!</string>

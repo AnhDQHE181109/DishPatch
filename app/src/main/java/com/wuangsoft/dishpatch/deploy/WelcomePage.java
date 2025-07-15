@@ -38,11 +38,7 @@ public class WelcomePage extends AppCompatActivity {
         replaceFragment(new ForgetPasswordFragment());
     }
     public void finishActivity(View v){
-
-        super.finish(); // back to welcome.xml
-
         super.finish();
-
     }
     public void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
