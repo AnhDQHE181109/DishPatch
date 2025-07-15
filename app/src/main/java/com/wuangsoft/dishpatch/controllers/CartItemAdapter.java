@@ -27,6 +27,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
     List<CartItem> cartItems;
     private Callback callback;
     private SparseBooleanArray itemsStateArray = new SparseBooleanArray();
+    private boolean isSelectedAll = false;
 
     public CartItemAdapter(List<CartItem> cartItems) {
         this.cartItems = cartItems;
@@ -78,6 +79,22 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
 
     public void setCallback(Callback callback) {
         this.callback = callback;
+    }
+
+    public void selectAll() {
+        isSelectedAll = true;
+        for (int i = 0; i < cartItems.size(); i++) {
+            itemsStateArray.put(i, true);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void deSelectAll() {
+        isSelectedAll = false;
+        for (int i = 0; i < cartItems.size(); i++) {
+            itemsStateArray.put(i, false);
+        }
+        notifyDataSetChanged();
     }
 
     public interface Callback {

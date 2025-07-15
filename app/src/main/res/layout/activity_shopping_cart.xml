@@ -60,13 +60,13 @@
             app:layout_constraintTop_toTopOf="@+id/checkoutButton" />
 
         <CheckBox
-            android:id="@+id/checkBox"
+            android:id="@+id/selectAllCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
-            android:text="@string/all"
             android:buttonTint="@color/orange"
+            android:text="@string/all"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -81,6 +81,21 @@
             app:cornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/deleteItemsButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/delete_items_button"
+            android:text="@string/delete"
+            android:textColor="@color/orange"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="@+id/checkoutButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/checkoutButton"
+            app:layout_constraintTop_toTopOf="@+id/checkoutButton" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar

@@ -11,4 +11,10 @@
         <item name="android:textAlignment">center</item>
     </style>
 
+    <style name="btn_delete">
+        <item name="android:shape">rectangle</item>
+        <item name="android:background">@drawable/delete_items_button</item>"
+        <item name="android:radius">20dp</item>
+    </style>
+
 </resources>

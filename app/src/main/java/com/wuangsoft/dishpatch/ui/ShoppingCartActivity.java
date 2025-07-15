@@ -2,11 +2,13 @@ package com.wuangsoft.dishpatch.ui;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
     private static final String TAG = ShoppingCartActivity.class.getSimpleName();
     private Toolbar shoppingCartToolbar;
     private List<CartItem> selectedCartItems = new ArrayList<>();
+    private boolean editMode = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,9 @@ public class ShoppingCartActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.cart_title);
         shoppingCartToolbar.setNavigationOnClickListener(v -> onBackPressed());
         ((TextView)findViewById(R.id.subtotalPriceText)).setText("0₫");
+
+        CheckBox selectAllCheckOut = findViewById(R.id.selectAllCheckBox);
+        findViewById(R.id.deleteItemsButton).setVisibility(View.INVISIBLE);
 
         DatabaseOperations dbOps = new DatabaseOperations("user01");
 
@@ -77,6 +83,12 @@ public class ShoppingCartActivity extends AppCompatActivity {
                             selectedCartItems.add(cartItem);
                         } else {
                             selectedCartItems.remove(cartItem);
+                        }
+
+                        if (selectedCartItems.size() == cartItemsCallback.size()) {
+                            selectAllCheckOut.setChecked(true);
+                        } else {
+                            selectAllCheckOut.setChecked(false);
                         }
 
                         calculateSubtotal();
@@ -140,6 +152,25 @@ public class ShoppingCartActivity extends AppCompatActivity {
             }
         });
 
+        selectAllCheckOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectAllCheckOut.isChecked()) {
+                    adapter.selectAll();
+                } else {
+                    adapter.deSelectAll();
+                }
+            }
+        });
+
+        Button deleteButton = findViewById(R.id.deleteItemsButton);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+            }
+        });
+
 
 //        List<CartItemFirebase> cartItemsFetched = dbOps.getCartItems();
 //        Log.i("Firebase test ", "Cart data fetched from Firebase: " + dbOps.getCartItems("user01");
@@ -157,7 +188,47 @@ public class ShoppingCartActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
         if (item.getItemId() == R.id.action_edit_list) {
+            if (editMode) {
+                Log.i(TAG, "onOptionsItemSelected: editMode: true");
+
+                item.setIcon(R.drawable.outline_check_24);
+                editMode = false;
+                findViewById(R.id.deleteItemsButton).setVisibility(View.VISIBLE);
+                findViewById(R.id.subtotalPriceText).setVisibility(View.INVISIBLE);
+                findViewById(R.id.checkoutButton).setVisibility(View.INVISIBLE);
+
+                startActionMode(new ActionMode.Callback() {
+                    @Override
+                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onDestroyActionMode(ActionMode mode) {
+
+                    }
+                });
+            } else {
+                Log.i(TAG, "onOptionsItemSelected: editMode: false");
+
+                editMode = true;
+                item.setIcon(R.drawable.outline_edit_24);
+                findViewById(R.id.deleteItemsButton).setVisibility(View.INVISIBLE);
+                findViewById(R.id.subtotalPriceText).setVisibility(View.VISIBLE);
+                findViewById(R.id.checkoutButton).setVisibility(View.VISIBLE);
+            }
 
         }
 
