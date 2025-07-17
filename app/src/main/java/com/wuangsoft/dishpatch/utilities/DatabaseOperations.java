@@ -111,6 +111,32 @@ public class DatabaseOperations {
         });
     }
 
+    public void removeCartItems(List<CartItem> cartItems) {
+        firebaseDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot cartItemSnapshot : snapshot.getChildren()) {
+                    CartItemFirebase cartItemFetched = cartItemSnapshot.getValue(CartItemFirebase.class);
+                    for (CartItem cartItem : cartItems) {
+                        if (cartItemFetched.getDishId().equalsIgnoreCase(cartItem.getProductID())) {
+                            firebaseDatabase.child(cartItemSnapshot.getKey()).removeValue();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "removeCartItems:onCancelled", error.toException());
+            }
+        });
+
+    }
+
+    public void addCartItemWithID(String id, CartItemFirebase cartItemFirebase) {
+        firebaseDatabase.child(id).setValue(cartItemFirebase);
+    }
+
     public interface CartItemCallback {
         void onCallbackGetCartItems(List<CartItem> cartItemsCallback);
 //        void onCallbackUpdateItemQuantity(List<String> cartItemsList);

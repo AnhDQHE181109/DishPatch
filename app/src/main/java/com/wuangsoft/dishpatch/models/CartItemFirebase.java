@@ -22,6 +22,16 @@ public class CartItemFirebase {
         this.quantity = quantity;
     }
 
+    public CartItemFirebase(Long addedAt, String dishId, String imageUrl, String name, Long pricePerItem, Long quantity, String notes) {
+        this.addedAt = addedAt;
+        this.dishId = dishId;
+        this.imageUrl = imageUrl;
+        this.name = name;
+        this.pricePerItem = pricePerItem;
+        this.quantity = quantity;
+        this.notes = notes;
+    }
+
     public Long getAddedAt() {
         return addedAt;
     }
