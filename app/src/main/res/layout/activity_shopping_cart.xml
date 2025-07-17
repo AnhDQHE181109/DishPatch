@@ -108,4 +108,14 @@
         app:layout_constraintStart_toStartOf="@+id/cartItemsRecView"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
+    <TextView
+        android:id="@+id/cartEmptyMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/dataWaitProgressBar"
+        app:layout_constraintStart_toStartOf="@+id/dataWaitProgressBar"
+        app:layout_constraintTop_toTopOf="@+id/dataWaitProgressBar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
