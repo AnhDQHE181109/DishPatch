@@ -97,6 +97,12 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
         notifyDataSetChanged();
     }
 
+    public void setItemSelectedState(int position, boolean isSelected) {
+        if (position >= 0 && position < cartItems.size()) {
+            itemsStateArray.put(position, isSelected);
+        }
+    }
+
     public interface Callback {
         void onCheckedChanged(CartItem cartItem, boolean isChecked);
 //        void onClick(CartItem cartItem);
@@ -131,6 +137,10 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
 //                    callback.onCheckedChanged(cartItems.get(getAdapterPosition()), isChecked);
 //                }
 //            });
+
+            checkBox.setOnCheckedChangeListener(null);
+
+            checkBox.setChecked(itemsStateArray.get(getAdapterPosition(), false));
 
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -172,7 +182,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
 //                checkBox.setChecked(false);
 //            }
 
-            checkBox.setChecked(itemsStateArray.get(getAdapterPosition()));
+//            Log.i("CartItemAdapter", "bindCheckboxListener called");
 
         }
 
