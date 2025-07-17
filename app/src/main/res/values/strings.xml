@@ -31,6 +31,7 @@
     <string name="vnd">₫</string>
     <string name="delete">Delete</string>
     <string name="askToSelectToDelete">Please select items to delete!</string>
+    <string name="cartEmtpty">There\'s nothing in your cart right now, come back later!</string>
 
     <!-- Order Confirmation -->
     <string name="order_confirmed_title">Order Confirmed!</string>

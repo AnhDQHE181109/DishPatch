@@ -112,12 +112,14 @@ public class DatabaseOperations {
     }
 
     public void removeCartItems(List<CartItem> cartItems) {
+        List<CartItem> cartItemsList = new ArrayList<>(cartItems);
+
         firebaseDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot cartItemSnapshot : snapshot.getChildren()) {
                     CartItemFirebase cartItemFetched = cartItemSnapshot.getValue(CartItemFirebase.class);
-                    for (CartItem cartItem : cartItems) {
+                    for (CartItem cartItem : cartItemsList) {
                         if (cartItemFetched.getDishId().equalsIgnoreCase(cartItem.getProductID())) {
                             firebaseDatabase.child(cartItemSnapshot.getKey()).removeValue();
                         }

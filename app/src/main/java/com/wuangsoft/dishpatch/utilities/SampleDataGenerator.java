@@ -22,6 +22,8 @@ public class SampleDataGenerator {
         } else {
             addedAt = (long) 0;
         }
+        firebaseCartItems.add(new CartItemFirebase(addedAt, "item01", "https://assets.epicurious.com/photos/5953ca064919e41593325d97/4:3/w_4992,h_3744,c_limit/bubble_tea_recipe_062817.jpg", "Trà sữa trân châu", 20000L, 3L));
+        firebaseCartItems.add(new CartItemFirebase(addedAt, "item03", "https://thegioidouong.net/wp-content/uploads/2021/06/coca-300ml-chai-nhua.jpg", "Coca Cola", 10000L, 5L));
         firebaseCartItems.add(new CartItemFirebase(addedAt, "item04", "https://shop.yamaha-motor-india.com/cdn/shop/files/black_ab93a3f9-f389-4a7a-bf90-b9ba660ba92a.png?v=1702465214", "Food 1", 16000L, 3L));
         firebaseCartItems.add(new CartItemFirebase(addedAt, "item05", "https://www.yamaha-motor-india.com/theme/v4/images/webp_images/r_series_all/r3/color/r3-blue.webp", "Food 2", 32000L, 1L, "More ice"));
         firebaseCartItems.add(new CartItemFirebase(addedAt, "item06", "https://images.unsplash.com/photo-1550547660-d9450f859349", "Food 3", 35000L, 6L));

@@ -37,7 +37,9 @@ public class ShoppingCartActivity extends AppCompatActivity {
     private static final String TAG = ShoppingCartActivity.class.getSimpleName();
     private Toolbar shoppingCartToolbar;
     private List<CartItem> selectedCartItems = new ArrayList<>();
+    private List<CartItem> fetchedCartItems = new ArrayList<>();
     private boolean editMode = true;
+    private MenuItem editModeToggleButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,8 @@ public class ShoppingCartActivity extends AppCompatActivity {
         CheckBox selectAllCheckOut = findViewById(R.id.selectAllCheckBox);
         findViewById(R.id.deleteItemsButton).setVisibility(View.INVISIBLE);
 
+        findViewById(R.id.cartEmptyMessage).setVisibility(View.INVISIBLE);
+
         DatabaseOperations dbOps = new DatabaseOperations("user01");
 
         RecyclerView recView = findViewById(R.id.cartItemsRecView);
@@ -77,8 +81,14 @@ public class ShoppingCartActivity extends AppCompatActivity {
             public void onCallbackGetCartItems(List<CartItem> cartItemsCallback) {
                 findViewById(R.id.dataWaitProgressBar).setVisibility(View.INVISIBLE);
 
+                if (cartItemsCallback.isEmpty()) {
+                    showCartEmptyMessage(true);
+                    return;
+                }
+
                 adapter.setCartItems(cartItemsCallback);
                 adapter.notifyDataSetChanged();
+                fetchedCartItems = cartItemsCallback;
 
                 adapter.setCallback(new CartItemAdapter.Callback() {
                     @Override
@@ -146,6 +156,10 @@ public class ShoppingCartActivity extends AppCompatActivity {
                         selectedCartItems.clear();
 
                         if (selectAllCheckOut.isChecked()) {
+                            if (cartItemsCallback.isEmpty()) {
+                                selectAllCheckOut.setChecked(false);
+                                return;
+                            }
                             for (CartItem cartItem : cartItemsCallback) {
                                 if (!selectedCartItems.contains(cartItem)) {
                                     selectedCartItems.add(cartItem);
@@ -160,8 +174,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
                     }
                 });
 
-                String cartTitle = getResources().getString(R.string.cart_title);
-                getSupportActionBar().setTitle(cartTitle + " (" + cartItemsCallback.size() + ")");
+                setCartTitle(cartItemsCallback.size());
                 Log.i(TAG, "cartItems: " + cartItemsCallback.toString());
             }
         });
@@ -191,7 +204,16 @@ public class ShoppingCartActivity extends AppCompatActivity {
                     dbOps.removeCartItems(selectedCartItems);
                     adapter.getCartItems().removeAll(selectedCartItems);
                     adapter.notifyDataSetChanged();
+                    adapter.deSelectAll();
+
+                    selectedCartItems.clear();
+                    calculateSubtotal();
+                    selectAllCheckOut.setChecked(false);
+
                     disableEditMode();
+                    editModeToggleButton.setIcon(R.drawable.outline_edit_24);
+                    setCartTitle(fetchedCartItems.size());
+                    if (fetchedCartItems.isEmpty()) showCartEmptyMessage(true);
                 }
             }
         });
@@ -215,6 +237,8 @@ public class ShoppingCartActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.action_edit_list) {
+            editModeToggleButton = item;
+
             if (editMode) {
                 Log.i(TAG, "onOptionsItemSelected: editMode: true");
 
@@ -268,6 +292,23 @@ public class ShoppingCartActivity extends AppCompatActivity {
         findViewById(R.id.checkoutButton).setVisibility(View.VISIBLE);
     }
 
+    void setCartTitle(int cartSize) {
+        String cartTitle = getResources().getString(R.string.cart_title);
+        getSupportActionBar().setTitle(cartTitle + " (" + cartSize + ")");
+    }
+
+    void showCartEmptyMessage(boolean isShown) {
+        TextView cartEmptyMessage = findViewById(R.id.cartEmptyMessage);
+
+        if (isShown) {
+            cartEmptyMessage.setText(getResources().getString(R.string.cartEmtpty));
+            cartEmptyMessage.setVisibility(View.VISIBLE);
+        } else {
+            cartEmptyMessage.setVisibility(View.INVISIBLE);
+        }
+
+    }
+
     public List<CartItem> sampleCartItems() {
         List<CartItem> cartItems = new ArrayList<>();
 
@@ -292,7 +333,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
         SampleDataGenerator sag = new SampleDataGenerator();
         List<CartItemFirebase> firebaseCartItems = sag.generateFirebaseSampleData();
 
-        int itemCount = 3;
+        int itemCount = 1;
         for (CartItemFirebase firebaseCartItem : firebaseCartItems) {
             dbOps.addCartItemWithID("cartItem00" + itemCount++, firebaseCartItem);
         }
