@@ -129,6 +129,13 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             productQuantity = itemView.findViewById(R.id.productQuantity);
             decrementButton = itemView.findViewById(R.id.decrementButton);
             incrementButton = itemView.findViewById(R.id.incrementButton);
+
+            productImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("CartItemAdapter", "productImage onClick called");
+                }
+            });
         }
 
         void bindCheckboxListener(int position) {
@@ -141,6 +148,13 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             checkBox.setOnCheckedChangeListener(null);
 
             checkBox.setChecked(itemsStateArray.get(getAdapterPosition(), false));
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkBox.setChecked(!itemsStateArray.get(getAdapterPosition(), false));
+//                    Log.i("CartItemAdapter", "itemView onClick called");
+                }
+            });
 
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
