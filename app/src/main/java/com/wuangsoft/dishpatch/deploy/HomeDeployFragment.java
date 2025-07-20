@@ -1,14 +1,18 @@
-// HomeDeployFragment.java (Full Home Screen with Firebase + Adapters)
 package com.wuangsoft.dishpatch.deploy;
 
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,6 +47,7 @@ public class HomeDeployFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home_deploy, container, false);
 
+        // Setup RecyclerViews
         recyclerViewCategories = root.findViewById(R.id.recyclerViewCategories);
         recyclerViewBestSeller = root.findViewById(R.id.recyclerViewBestSeller);
         recyclerViewRecommend = root.findViewById(R.id.recyclerViewRecommend);
@@ -60,6 +65,17 @@ public class HomeDeployFragment extends Fragment {
         recyclerViewCategories.setAdapter(categoryAdapter);
         recyclerViewBestSeller.setAdapter(bestSellerAdapter);
         recyclerViewRecommend.setAdapter(recommendAdapter);
+
+        // Setup account button click listener
+        ImageButton accountButton = root.findViewById(R.id.accountbutton);
+        accountButton.setOnClickListener(v -> {
+            // Navigate to ProfileFragment
+            ProfileFragment profileFragment = ProfileFragment.newInstance();
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+            transaction.replace(R.id.frame_layout, profileFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        });
 
         loadHomeData();
 
