@@ -26,7 +26,7 @@ public class EditProfileFragment extends Fragment {
     private static final String TAG = "EditProfileFragment";
     private static final String USER_ID = "HCre5W0AT8VzE0i2BCrp42p0Bv43"; // Your Firebase user ID
     
-    private EditText editName, editUsername, editPhone, editAddress, editEmail;
+    private EditText editName, editUsername, editPhone, editAddress;
     private ImageView profileAvatar;
     private ImageButton backButton;
     private Button saveButton, cancelButton;
@@ -60,7 +60,6 @@ public class EditProfileFragment extends Fragment {
         editUsername = view.findViewById(R.id.editUsername);
         editPhone = view.findViewById(R.id.editPhone);
         editAddress = view.findViewById(R.id.editAddress);
-        editEmail = view.findViewById(R.id.editEmail);
         profileAvatar = view.findViewById(R.id.profileAvatar);
         backButton = view.findViewById(R.id.backButton);
         saveButton = view.findViewById(R.id.saveButton);
@@ -94,7 +93,6 @@ public class EditProfileFragment extends Fragment {
         // Validate inputs
         String name = editName.getText().toString().trim();
         String username = editUsername.getText().toString().trim();
-        String email = editEmail.getText().toString().trim();
         String phone = editPhone.getText().toString().trim();
         String address = editAddress.getText().toString().trim();
 
@@ -108,15 +106,9 @@ public class EditProfileFragment extends Fragment {
             return;
         }
 
-        if (email.isEmpty()) {
-            editEmail.setError("Email is required");
-            return;
-        }
-
         // Update user object
         currentUser.setName(name);
         currentUser.setUsername(username);
-        currentUser.setEmail(email);
         currentUser.setPhone(phone);
         currentUser.setAddress(address);
 
@@ -167,12 +159,6 @@ public class EditProfileFragment extends Fragment {
             String name = user.getName();
             if (name != null && !name.isEmpty()) {
                 editName.setText(name);
-            }
-
-            // Update email
-            String email = user.getEmail();
-            if (email != null && !email.isEmpty()) {
-                editEmail.setText(email);
             }
 
             // Update username
