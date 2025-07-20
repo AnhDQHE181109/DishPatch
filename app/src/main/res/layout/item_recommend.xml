@@ -37,10 +37,11 @@
                 android:id="@+id/textRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5.0"
+                android:text="4.5 ★"
+                android:textSize="14sp"
                 android:textColor="@android:color/black"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+                android:layout_alignParentStart="true"
+                android:layout_margin="8dp" />
         </LinearLayout>
 
         <!-- Price tag over image -->
