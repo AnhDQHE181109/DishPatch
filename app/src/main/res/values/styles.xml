@@ -17,4 +17,8 @@
         <item name="android:radius">20dp</item>
     </style>
 
+    <style name="bold_text">
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
