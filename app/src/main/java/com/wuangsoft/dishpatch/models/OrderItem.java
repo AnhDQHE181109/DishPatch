@@ -1,21 +1,34 @@
+// OrderItem.java
 package com.wuangsoft.dishpatch.models;
 
-public class OrderItem {
+import java.io.Serializable;
+
+public class OrderItem implements Serializable {
+
+    private String imageUrl;
     private String itemId;
     private String name;
-    private String imageUrl;
     private Long price;
     private Long quantity;
 
     public OrderItem() {
+        // Default constructor required for calls to DataSnapshot.getValue(OrderItem.class)
     }
 
-    public OrderItem(String itemId, String name, String imageUrl, Long price, Long quantity) {
+    public OrderItem(String imageUrl, String itemId, String name, Long price, Long quantity) {
+        this.imageUrl = imageUrl;
         this.itemId = itemId;
         this.name = name;
-        this.imageUrl = imageUrl;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getItemId() {
@@ -34,14 +47,6 @@ public class OrderItem {
         this.name = name;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public Long getPrice() {
         return price;
     }
@@ -56,5 +61,16 @@ public class OrderItem {
 
     public void setQuantity(Long quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "imageUrl='" + imageUrl + '\'' +
+                ", itemId='" + itemId + '\'' +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                '}';
     }
 }

@@ -42,7 +42,6 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.Reco
                 .placeholder(R.drawable.home_icon)
                 .error(R.drawable.home_icon)
                 .into(holder.image);
-        holder.name.setText(item.getName());
         holder.price.setText(String.format("%,.0f₫", item.getPrice()).replace(',', '.'));
         holder.rating.setText(String.valueOf(item.getRating()));
         

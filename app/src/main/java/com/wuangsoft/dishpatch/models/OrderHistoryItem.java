@@ -1,24 +1,39 @@
+// OrderHistoryItem.java
 package com.wuangsoft.dishpatch.models;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class OrderFirebase {
+public class OrderHistoryItem implements Serializable {
+
+    private String orderId;
     private Long createdAt;
     private List<OrderItem> items;
     private String status;
     private Long totalAmount;
     private String userId;
-    private String reviewId; // optional
+    private String reviewId;
 
-    public OrderFirebase() {
+    public OrderHistoryItem() {
+        // Default constructor required for calls to DataSnapshot.getValue(OrderHistoryItem.class)
     }
 
-    public OrderFirebase(Long createdAt, List<OrderItem> items, String status, Long totalAmount, String userId) {
+    public OrderHistoryItem(String orderId, Long createdAt, List<OrderItem> items, String status, Long totalAmount, String userId, String reviewId) {
+        this.orderId = orderId;
         this.createdAt = createdAt;
         this.items = items;
         this.status = status;
         this.totalAmount = totalAmount;
         this.userId = userId;
+        this.reviewId = reviewId;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
     public Long getCreatedAt() {
@@ -69,13 +84,16 @@ public class OrderFirebase {
         this.reviewId = reviewId;
     }
 
-    // Tiện ích: lấy title từ món đầu tiên
-    public String getTitle() {
-        return (items != null && !items.isEmpty()) ? items.get(0).getName() : "No item";
-    }
-
-    // Tiện ích: lấy ảnh món đầu tiên
-    public String getFirstImageUrl() {
-        return (items != null && !items.isEmpty()) ? items.get(0).getImageUrl() : null;
+    @Override
+    public String toString() {
+        return "OrderHistoryItem{" +
+                "orderId='" + orderId + '\'' +
+                ", createdAt=" + createdAt +
+                ", items=" + items +
+                ", status='" + status + '\'' +
+                ", totalAmount=" + totalAmount +
+                ", userId='" + userId + '\'' +
+                ", reviewId='" + reviewId + '\'' +
+                '}';
     }
 }
