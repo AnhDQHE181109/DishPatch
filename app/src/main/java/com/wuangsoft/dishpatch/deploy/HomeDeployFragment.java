@@ -11,61 +11,63 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-import com.wuangsoft.dishpatch.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeDeployFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.wuangsoft.dishpatch.R;
+import com.wuangsoft.dishpatch.models.Category;
+import com.wuangsoft.dishpatch.models.MenuItem;
+import com.wuangsoft.dishpatch.utilities.HomeDataCallback;
+import com.wuangsoft.dishpatch.utilities.HomeDataProvider;
+
+import com.wuangsoft.dishpatch.controllers.CategoryAdapter;
+import com.wuangsoft.dishpatch.controllers.BestSellerAdapter;
+import com.wuangsoft.dishpatch.controllers.RecommendAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class HomeDeployFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RecyclerView recyclerViewCategories, recyclerViewBestSeller, recyclerViewRecommend;
+    private CategoryAdapter categoryAdapter;
+    private BestSellerAdapter bestSellerAdapter;
+    private RecommendAdapter recommendAdapter;
+    private HomeDataProvider dataProvider;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    public HomeDeployFragment() {}
 
-    public HomeDeployFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeDeployFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeDeployFragment newInstance(String param1, String param2) {
-        HomeDeployFragment fragment = new HomeDeployFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home_deploy, container, false);
-        
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_home_deploy, container, false);
+
+        // Setup RecyclerViews
+        recyclerViewCategories = root.findViewById(R.id.recyclerViewCategories);
+        recyclerViewBestSeller = root.findViewById(R.id.recyclerViewBestSeller);
+        recyclerViewRecommend = root.findViewById(R.id.recyclerViewRecommend);
+
+        dataProvider = new HomeDataProvider();
+
+        categoryAdapter = new CategoryAdapter();
+        bestSellerAdapter = new BestSellerAdapter();
+        recommendAdapter = new RecommendAdapter();
+
+        recyclerViewCategories.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewBestSeller.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewRecommend.setLayoutManager(new GridLayoutManager(getContext(), 2));
+
+        recyclerViewCategories.setAdapter(categoryAdapter);
+        recyclerViewBestSeller.setAdapter(bestSellerAdapter);
+        recyclerViewRecommend.setAdapter(recommendAdapter);
+
         // Setup account button click listener
-        ImageButton accountButton = view.findViewById(R.id.accountbutton);
+        ImageButton accountButton = root.findViewById(R.id.accountbutton);
         accountButton.setOnClickListener(v -> {
             // Navigate to ProfileFragment
             ProfileFragment profileFragment = ProfileFragment.newInstance();
@@ -74,7 +76,28 @@ public class HomeDeployFragment extends Fragment {
             transaction.addToBackStack(null);
             transaction.commit();
         });
-        
-        return view;
+
+        loadHomeData();
+
+        return root;
+    }
+
+    private void loadHomeData() {
+        dataProvider.getCategories(new HomeDataCallback.CategoryCallback() {
+            @Override
+            public void onCategoriesLoaded(List<Category> categories) {
+                categoryAdapter.setCategories(categories);
+            }
+        });
+
+        dataProvider.getMenuItems(new HomeDataCallback.MenuItemCallback() {
+            @Override
+            public void onMenuItemsLoaded(List<MenuItem> items) {
+                List<MenuItem> best = new ArrayList<>(items);
+                best.sort((a, b) -> (int) (b.getPrice() - a.getPrice()));
+                bestSellerAdapter.setItems(best.subList(0, Math.min(best.size(), 5)));
+                recommendAdapter.setItems(items);
+            }
+        });
     }
 }
