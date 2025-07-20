@@ -109,6 +109,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
 
         void onDecrementClick(CartItem cartItem);
         void onIncrementClick(CartItem cartItem);
+        void onImageClick(CartItem cartItem);
     }
 
     class CartItemHolder extends RecyclerView.ViewHolder {
@@ -133,7 +134,9 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             productImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i("CartItemAdapter", "productImage onClick called");
+                    if (callback != null) {
+                        callback.onImageClick(cartItems.get(getAdapterPosition()));
+                    }
                 }
             });
         }
