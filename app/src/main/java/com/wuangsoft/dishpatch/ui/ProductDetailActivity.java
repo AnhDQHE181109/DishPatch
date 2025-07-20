@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
@@ -129,6 +130,15 @@ public class ProductDetailActivity extends AppCompatActivity {
     
     private void updateQuantityDisplay() {
         itemCountText.setText(String.valueOf(quantity));
+        
+        // Update less button drawable based on quantity
+        if (quantity > 1) {
+            // Set to active drawable when quantity > 1
+            lessButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.lessactive));
+        } else {
+            // Set to default drawable when quantity = 1
+            lessButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.less));
+        }
     }
     
     private void addToCart() {
