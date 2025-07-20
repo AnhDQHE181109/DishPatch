@@ -1,24 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="120dp"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:layout_marginEnd="8dp">
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="140dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp">
 
-    <ImageView
-        android:id="@+id/imageBestSeller"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:scaleType="centerCrop"
-        android:contentDescription="Best seller image"/>
-
-    <TextView
-        android:id="@+id/textPrice"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="14sp"
-        android:textColor="@android:color/black"
-        android:layout_marginTop="4dp"/>
-</LinearLayout>
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageBestSeller"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Best seller image"
+            android:background="@drawable/rounded_image" />
+
+        <TextView
+            android:id="@+id/textPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="20.000đ"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:paddingTop="4dp"
+            android:paddingBottom="8dp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

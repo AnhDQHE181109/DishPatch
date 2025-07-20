@@ -16,13 +16,25 @@ import com.wuangsoft.dishpatch.R;
 import com.wuangsoft.dishpatch.databinding.ActivityMainBinding;
 import com.wuangsoft.dishpatch.databinding.ActivityMainDeployBinding;
 import com.wuangsoft.dishpatch.ui.ShoppingCartActivity;
+import com.wuangsoft.dishpatch.utilities.UserPreferences;
 
 public class MainActivityDeploy extends AppCompatActivity {
     ActivityMainDeployBinding binding;
+    private UserPreferences userPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Check if user is logged in
+        userPreferences = new UserPreferences(this);
+        if (!userPreferences.isLoggedIn()) {
+            // User not logged in, redirect to welcome
+            startActivity(new Intent(this, WelcomeActivity.class));
+            finish();
+            return;
+        }
+        
         binding = ActivityMainDeployBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 

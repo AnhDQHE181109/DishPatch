@@ -28,6 +28,7 @@ import com.wuangsoft.dishpatch.models.CartItem;
 import com.wuangsoft.dishpatch.models.CartItemFirebase;
 import com.wuangsoft.dishpatch.utilities.DatabaseOperations;
 import com.wuangsoft.dishpatch.utilities.SampleDataGenerator;
+import com.wuangsoft.dishpatch.utilities.UserPreferences;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,9 @@ public class ShoppingCartActivity extends AppCompatActivity {
     private List<CartItem> fetchedCartItems = new ArrayList<>();
     private boolean editMode = true;
     private MenuItem editModeToggleButton;
+    
+    private UserPreferences userPreferences;
+    private String currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,16 @@ public class ShoppingCartActivity extends AppCompatActivity {
         shoppingCartToolbar = findViewById(R.id.shoppingCartToolbar);
         setSupportActionBar(shoppingCartToolbar);
 
+        // Initialize UserPreferences
+        userPreferences = new UserPreferences(this);
+        currentUserId = userPreferences.getUserId();
+        
+        if (currentUserId == null) {
+            Toast.makeText(this, "Please login to view cart", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         shoppingCartToolbar.setNavigationIcon(R.drawable.back_arrow_large);
@@ -67,7 +81,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
 
         findViewById(R.id.cartEmptyMessage).setVisibility(View.INVISIBLE);
 
-        DatabaseOperations dbOps = new DatabaseOperations("user01");
+        DatabaseOperations dbOps = new DatabaseOperations(currentUserId);
 
         RecyclerView recView = findViewById(R.id.cartItemsRecView);
         recView.setLayoutManager(new LinearLayoutManager(this));
@@ -130,6 +144,9 @@ public class ShoppingCartActivity extends AppCompatActivity {
                             adapter.notifyDataSetChanged();
                             calculateSubtotal();
 //                            selectedCartItems.clear();
+                        } else if (currentQuantity == 1) {
+                            // Show confirmation dialog for removing item
+                            showRemoveItemConfirmationDialog(cartItem, dbOps, adapter);
                         }
 
 //                        Log.i(TAG, "Cart item quantity decremented: " + (Long.parseLong(cartItem.getProductQuantity()) - 1));
@@ -352,5 +369,47 @@ public class ShoppingCartActivity extends AppCompatActivity {
             ((TextView)findViewById(R.id.subtotalPriceText))
                     .setText(String.format("%,d", subtotalPrice).replace(',','.') + "₫");
         }
+    }
+    
+    private void showRemoveItemConfirmationDialog(CartItem cartItem, DatabaseOperations dbOps, CartItemAdapter adapter) {
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Remove Item")
+                .setMessage("Do you want to remove \"" + cartItem.getProductName() + "\" from your cart?")
+                .setPositiveButton("Remove", (dialog, which) -> {
+                    // Remove the item from cart using existing method
+                    List<CartItem> itemsToRemove = new ArrayList<>();
+                    itemsToRemove.add(cartItem);
+                    dbOps.removeCartItems(itemsToRemove);
+                    
+                    // Update adapter
+                    adapter.getCartItems().remove(cartItem);
+                    adapter.notifyDataSetChanged();
+                    
+                    // Update selected items if this item was selected
+                    selectedCartItems.remove(cartItem);
+                    fetchedCartItems.remove(cartItem);
+                    
+                    // Update "Select All" checkbox state
+                    CheckBox selectAllCheckBox = findViewById(R.id.selectAllCheckBox);
+                    if (selectAllCheckBox.isChecked() && !fetchedCartItems.isEmpty()) {
+                        selectAllCheckBox.setChecked(false);
+                    }
+                    
+                    // Update UI
+                    calculateSubtotal();
+                    setCartTitle(fetchedCartItems.size());
+                    
+                    // Show empty message if cart is now empty
+                    if (fetchedCartItems.isEmpty()) {
+                        showCartEmptyMessage(true);
+                    }
+                    
+                    Toast.makeText(ShoppingCartActivity.this, "Item removed from cart", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> {
+                    // Do nothing, just dismiss the dialog
+                    dialog.dismiss();
+                })
+                .show();
     }
 }

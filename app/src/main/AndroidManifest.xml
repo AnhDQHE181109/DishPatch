@@ -15,7 +15,21 @@
         android:theme="@style/Theme.DishPatch"
         tools:targetApi="31">
         <activity
+            android:name=".deploy.WelcomeActivity"
+            android:exported="true"
+            android:theme="@style/Theme.DishPatch">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ui.ShoppingCartActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DishPatch" />
+        <activity
+            android:name=".ui.ProductDetailActivity"
             android:exported="false"
             android:theme="@style/Theme.DishPatch" />
         <activity
@@ -29,14 +43,12 @@
             android:exported="true"></activity>
         <activity
             android:name=".deploy.MainActivityDeploy"
-            android:exported="true"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".deploy.WelcomePage"
+            android:exported="false"
+            android:theme="@style/Theme.DishPatch" />
 
         <meta-data
             android:name="preloaded_fonts"
