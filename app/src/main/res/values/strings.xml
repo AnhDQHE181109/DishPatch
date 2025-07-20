@@ -56,4 +56,12 @@
     <string name="delivery_time_value">25 mins</string>
     <string name="pay_now">Pay Now</string>
 
+    <plurals name="item_count">
+        <item quantity="one">%d item</item>
+        <item quantity="other">%d items</item>
+    </plurals>
+
+    <string name="order_details_unavailable">Order Details Unavailable</string>
+    <string name="no_items_in_order">0 items</string>
+
 </resources>

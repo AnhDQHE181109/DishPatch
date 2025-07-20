@@ -27,5 +27,7 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="shoppingCartBackground">#f6f6f6</color>
     <color name="light_grey">#e9e9e9</color>
+    <color name="button_active_background">#E95322</color>
+    <color name="button_inactive_background">#FAD0C4</color>
 
 </resources>
