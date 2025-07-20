@@ -65,7 +65,11 @@ public class CheckoutListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((CartItemHolder)holder).productName.setText(cartItem.getProductName());
                 ((CartItemHolder)holder).productPrice.setText(String.format("%,d",
                         Long.parseLong(cartItem.getProductPrice())).replace(',', '.') + "₫");
-                ((CartItemHolder)holder).productQuantity.setText(cartItem.getProductQuantity());
+                ((CartItemHolder)holder).productQuantity.setText("x" + cartItem.getProductQuantity());
+                ((CartItemHolder)holder).subtotalPrice.setText(String.format("%,d",
+                        Long.parseLong(cartItem.getProductPrice()) *
+                                Long.parseLong(cartItem.getProductQuantity())).replace(',', '.') + "₫");
+
             }
         } else {
             long subtotalPrice = 0;
@@ -104,6 +108,7 @@ public class CheckoutListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView productName;
         TextView productPrice;
         TextView productQuantity;
+        TextView subtotalPrice;
 
         public CartItemHolder(@NonNull View itemView) {
             super(itemView);
@@ -111,6 +116,7 @@ public class CheckoutListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             productName = itemView.findViewById(R.id.productName_confirm);
             productPrice = itemView.findViewById(R.id.productPrice_confirm);
             productQuantity = itemView.findViewById(R.id.productQuantity_confirm);
+            subtotalPrice = itemView.findViewById(R.id.subtotal_price_confirm);
         }
 
     }
