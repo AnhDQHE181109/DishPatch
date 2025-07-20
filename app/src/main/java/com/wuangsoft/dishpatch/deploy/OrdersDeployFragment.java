@@ -14,7 +14,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.wuangsoft.dishpatch.R;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link OrdersDeployFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class OrdersDeployFragment extends Fragment {
+
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    private String mParam1;
+    private String mParam2;
 
     private Button btnActive, btnCompleted, btnCancelled;
     private RecyclerView recyclerViewOrders;
@@ -22,6 +33,24 @@ public class OrdersDeployFragment extends Fragment {
 
     public OrdersDeployFragment() {
         // Required empty public constructor
+    }
+
+    public static OrdersDeployFragment newInstance(String param1, String param2) {
+        OrdersDeployFragment fragment = new OrdersDeployFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
     }
 
     @Override
@@ -37,22 +66,19 @@ public class OrdersDeployFragment extends Fragment {
         btnActive = view.findViewById(R.id.btnActive);
         btnCompleted = view.findViewById(R.id.btnCompleted);
         btnCancelled = view.findViewById(R.id.btnCancelled);
-//        recyclerViewOrders = view.findViewById(R.id.recyclerViewOrders);
-//        emptyLayout = view.findViewById(R.id.emptyLayout);
+        recyclerViewOrders = view.findViewById(R.id.recyclerViewOrders);
+        emptyLayout = view.findViewById(R.id.emptyLayout);
 
-        // Gán listener cho nút lọc
         btnActive.setOnClickListener(v -> loadOrders("pending"));
         btnCompleted.setOnClickListener(v -> loadOrders("delivered"));
         btnCancelled.setOnClickListener(v -> loadOrders("canceled"));
 
-        // Mặc định tải đơn Active
         loadOrders("pending");
     }
 
     private void loadOrders(String status) {
-        // TODO: Load đơn từ Firestore theo status (sẽ viết sau)
+        // TODO: Load orders from Firestore by status
 
-        // Tạm thời ẩn danh sách và hiển thị layout trống
         recyclerViewOrders.setVisibility(View.GONE);
         emptyLayout.setVisibility(View.VISIBLE);
     }
