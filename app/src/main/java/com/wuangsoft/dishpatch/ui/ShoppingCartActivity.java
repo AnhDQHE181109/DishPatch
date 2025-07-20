@@ -28,6 +28,7 @@ import com.wuangsoft.dishpatch.models.CartItem;
 import com.wuangsoft.dishpatch.models.CartItemFirebase;
 import com.wuangsoft.dishpatch.utilities.DatabaseOperations;
 import com.wuangsoft.dishpatch.utilities.SampleDataGenerator;
+import com.wuangsoft.dishpatch.utilities.UserPreferences;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,9 @@ public class ShoppingCartActivity extends AppCompatActivity {
     private List<CartItem> fetchedCartItems = new ArrayList<>();
     private boolean editMode = true;
     private MenuItem editModeToggleButton;
+    
+    private UserPreferences userPreferences;
+    private String currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,16 @@ public class ShoppingCartActivity extends AppCompatActivity {
         shoppingCartToolbar = findViewById(R.id.shoppingCartToolbar);
         setSupportActionBar(shoppingCartToolbar);
 
+        // Initialize UserPreferences
+        userPreferences = new UserPreferences(this);
+        currentUserId = userPreferences.getUserId();
+        
+        if (currentUserId == null) {
+            Toast.makeText(this, "Please login to view cart", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         shoppingCartToolbar.setNavigationIcon(R.drawable.back_arrow_large);
@@ -67,7 +81,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
 
         findViewById(R.id.cartEmptyMessage).setVisibility(View.INVISIBLE);
 
-        DatabaseOperations dbOps = new DatabaseOperations("user01");
+        DatabaseOperations dbOps = new DatabaseOperations(currentUserId);
 
         RecyclerView recView = findViewById(R.id.cartItemsRecView);
         recView.setLayoutManager(new LinearLayoutManager(this));

@@ -48,7 +48,13 @@ public class HomeDataProvider {
                 List<MenuItem> items = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
                     MenuItem item = child.getValue(MenuItem.class);
-                    if (item != null) items.add(item);
+                    if (item != null) {
+                        // Set the ID from the key if not already set
+                        if (item.getId() == null || item.getId().isEmpty()) {
+                            item.setId(child.getKey());
+                        }
+                        items.add(item);
+                    }
                 }
                 callback.onMenuItemsLoaded(items);
             }

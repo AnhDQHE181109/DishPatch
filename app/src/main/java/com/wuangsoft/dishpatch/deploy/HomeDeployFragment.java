@@ -1,5 +1,6 @@
 package com.wuangsoft.dishpatch.deploy;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.wuangsoft.dishpatch.R;
 import com.wuangsoft.dishpatch.models.Category;
 import com.wuangsoft.dishpatch.models.MenuItem;
+import com.wuangsoft.dishpatch.ui.ShoppingCartActivity;
 import com.wuangsoft.dishpatch.utilities.HomeDataCallback;
 import com.wuangsoft.dishpatch.utilities.HomeDataProvider;
 
@@ -75,6 +77,14 @@ public class HomeDeployFragment extends Fragment {
             transaction.replace(R.id.frame_layout, profileFragment);
             transaction.addToBackStack(null);
             transaction.commit();
+        });
+        
+        // Setup cart button click listener
+        ImageButton cartButton = root.findViewById(R.id.cartbutton);
+        cartButton.setOnClickListener(v -> {
+            // Navigate to ShoppingCartActivity
+            Intent intent = new Intent(getActivity(), ShoppingCartActivity.class);
+            startActivity(intent);
         });
 
         loadHomeData();
