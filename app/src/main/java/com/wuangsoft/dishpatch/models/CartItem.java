@@ -3,7 +3,9 @@ package com.wuangsoft.dishpatch.models;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CartItem {
+import java.io.Serializable;
+
+public class CartItem implements Serializable {
 
     private String productID;
     private int productImageResourceID;

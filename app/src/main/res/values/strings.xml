@@ -43,12 +43,13 @@
 
     <!-- Payment Confirm -->
     <string name="payment">Payment</string>
+    <string name="order_confirm">Order confirm</string>
     <string name="back">Back to previous screen</string>
     <string name="shipping_address">Shipping Address</string>
     <string name="delivery_address_example">778 Locust View Drive Oaklanda, CA</string>
     <string name="order_summary">Order Summary</string>
     <string name="product_names">Strawberry Shake\nBroccoli Lasagna</string>
-    <string name="total_price">60.000đ</string>
+    <string name="total_price">Total price</string>
     <string name="payment_method">Payment Method</string>
     <string name="cash_on_delivery">Cash on Delivery</string>
     <string name="delivery_time">Delivery Time</string>
