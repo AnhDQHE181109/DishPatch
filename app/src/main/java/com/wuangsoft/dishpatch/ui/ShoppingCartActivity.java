@@ -28,8 +28,6 @@ import com.wuangsoft.dishpatch.controllers.CartItemAdapter;
 import com.wuangsoft.dishpatch.models.CartItem;
 import com.wuangsoft.dishpatch.models.CartItemFirebase;
 import com.wuangsoft.dishpatch.utilities.DatabaseOperations;
-import com.wuangsoft.dishpatch.utilities.HomeDataCallback;
-import com.wuangsoft.dishpatch.utilities.HomeDataProvider;
 import com.wuangsoft.dishpatch.utilities.SampleDataGenerator;
 import com.wuangsoft.dishpatch.utilities.UserPreferences;
 
@@ -265,46 +263,11 @@ public class ShoppingCartActivity extends AppCompatActivity {
             }
             
             @Override
-            public void onImageClick(CartItem cartItem) {
-                // Fetch complete product details from database to ensure description is included
-                HomeDataProvider dataProvider = new HomeDataProvider();
-                dataProvider.getMenuItems(new HomeDataCallback.MenuItemCallback() {
-                    @Override
-                    public void onMenuItemsLoaded(List<com.wuangsoft.dishpatch.models.MenuItem> items) {
-                        // Find the matching menu item by ID
-                        com.wuangsoft.dishpatch.models.MenuItem fullMenuItem = null;
-                        for (com.wuangsoft.dishpatch.models.MenuItem item : items) {
-                            if (item.getId().equals(cartItem.getProductID())) {
-                                fullMenuItem = item;
-                                break;
-                            }
-                        }
-                        
-                        if (fullMenuItem != null) {
-                            // Navigate with complete menu item data including description
-                            Intent intent = new Intent(ShoppingCartActivity.this, ProductDetailActivity.class);
-                            intent.putExtra("menuItem", fullMenuItem);
-                            startActivity(intent);
-                        } else {
-                            // Fallback to the original approach if item not found
-                            com.wuangsoft.dishpatch.models.MenuItem menuItem = new com.wuangsoft.dishpatch.models.MenuItem();
-                            menuItem.setId(cartItem.getProductID());
-                            menuItem.setName(cartItem.getProductName());
-                            menuItem.setImageUrl(cartItem.getProductImageURL());
-                            // Convert price string to double (remove currency symbols and dots)
-                            String priceStr = cartItem.getProductPrice().replaceAll("[₫.,]", "");
-                            try {
-                                menuItem.setPrice(Double.parseDouble(priceStr));
-                            } catch (NumberFormatException e) {
-                                menuItem.setPrice(0.0);
-                            }
-                            
-                            Intent intent = new Intent(ShoppingCartActivity.this, ProductDetailActivity.class);
-                            intent.putExtra("menuItem", menuItem);
-                            startActivity(intent);
-                        }
-                    }
-                });
+            public void onImageClick(com.wuangsoft.dishpatch.models.MenuItem menuItem) {
+                // Navigate with the complete menu item data (including description)
+                Intent intent = new Intent(ShoppingCartActivity.this, ProductDetailActivity.class);
+                intent.putExtra("menuItem", menuItem);
+                startActivity(intent);
             }
         });
     }
