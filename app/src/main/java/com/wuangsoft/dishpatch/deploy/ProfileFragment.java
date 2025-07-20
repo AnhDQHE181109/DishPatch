@@ -1,5 +1,6 @@
 package com.wuangsoft.dishpatch.deploy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,11 +23,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.wuangsoft.dishpatch.R;
 import com.wuangsoft.dishpatch.models.User;
+import com.wuangsoft.dishpatch.utilities.UserPreferences;
 
 public class ProfileFragment extends Fragment {
 
     private static final String TAG = "ProfileFragment";
-    private static final String USER_ID = "HCre5W0AT8VzE0i2BCrp42p0Bv43"; // Your Firebase user ID
     
     private TextView profileName, profileStatus, profileEmail, profileUsername, 
                      profilePhone, profileAddress, profileRole;
@@ -34,6 +36,8 @@ public class ProfileFragment extends Fragment {
     private Button editProfileButton, logoutButton;
     
     private DatabaseReference userRef;
+    private UserPreferences userPreferences;
+    private User currentUser;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -41,6 +45,13 @@ public class ProfileFragment extends Fragment {
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        userPreferences = new UserPreferences(getContext());
+        currentUser = userPreferences.getUser();
     }
 
     @Override
@@ -71,7 +82,9 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setupFirebase() {
-        userRef = FirebaseDatabase.getInstance().getReference().child("users").child(USER_ID);
+        if (currentUser != null) {
+            userRef = FirebaseDatabase.getInstance().getReference().child("users").child(currentUser.getUid());
+        }
     }
 
     private void setupClickListeners() {
@@ -89,35 +102,56 @@ public class ProfileFragment extends Fragment {
         });
 
         logoutButton.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Logout clicked", Toast.LENGTH_SHORT).show();
-            // TODO: Implement logout functionality
+            // Implement logout functionality
+            FirebaseAuth.getInstance().signOut();
+            userPreferences.logout();
+            
+            // Navigate back to welcome screen
+            Intent intent = new Intent(getActivity(), WelcomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            getActivity().finish();
+            
+            Toast.makeText(getContext(), "Logged out successfully", Toast.LENGTH_SHORT).show();
         });
     }
 
     private void loadUserData() {
-        userRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    User user = dataSnapshot.getValue(User.class);
-                    if (user != null) {
-                        updateUI(user);
-                    } else {
-                        Log.e(TAG, "User object is null");
-                        showError("Failed to load user data");
+        if (currentUser != null) {
+            // Use cached user data first
+            updateUI(currentUser);
+            
+            // Also fetch latest data from Firebase
+            if (userRef != null) {
+                userRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            User user = dataSnapshot.getValue(User.class);
+                            if (user != null) {
+                                currentUser = user;
+                                userPreferences.saveUser(user); // Update cached data
+                                updateUI(user);
+                            } else {
+                                Log.e(TAG, "User object is null");
+                                showError("Failed to load user data");
+                            }
+                        } else {
+                            Log.e(TAG, "User data doesn't exist");
+                            showError("User not found");
+                        }
                     }
-                } else {
-                    Log.e(TAG, "User data doesn't exist");
-                    showError("User not found");
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e(TAG, "Database error: " + databaseError.getMessage());
-                showError("Failed to load user data: " + databaseError.getMessage());
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.e(TAG, "Database error: " + databaseError.getMessage());
+                        showError("Failed to load user data: " + databaseError.getMessage());
+                    }
+                });
             }
-        });
+        } else {
+            showError("No user data found. Please login again.");
+        }
     }
 
     private void updateUI(User user) {

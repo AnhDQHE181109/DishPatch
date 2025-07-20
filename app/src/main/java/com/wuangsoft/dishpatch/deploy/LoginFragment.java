@@ -1,18 +1,31 @@
 package com.wuangsoft.dishpatch.deploy;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.wuangsoft.dishpatch.R;
+import com.wuangsoft.dishpatch.models.User;
+import com.wuangsoft.dishpatch.utilities.UserPreferences;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,44 +34,22 @@ import com.wuangsoft.dishpatch.R;
  */
 public class LoginFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String TAG = "LoginFragment";
+    
+    private EditText editEmail, editPassword;
+    private Button loginButton;
+    private FirebaseAuth mAuth;
+    private UserPreferences userPreferences;
 
     public LoginFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LoginFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LoginFragment newInstance(String param1, String param2) {
-        LoginFragment fragment = new LoginFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        mAuth = FirebaseAuth.getInstance();
+        userPreferences = new UserPreferences(getContext());
     }
 
     @Override
@@ -67,24 +58,101 @@ public class LoginFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
+    
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        
+        // Initialize views
+        editEmail = view.findViewById(R.id.fullnamebox);
+        editPassword = view.findViewById(R.id.passwordbox);
+        loginButton = view.findViewById(R.id.loginbutton);
+        
         TextView signUpTextView = view.findViewById(R.id.switchtoSignUp);
         TextView forgetTextView = view.findViewById(R.id.forgetbutton);
 
-        // --- Set Click Listeners ---
+        // Set Click Listeners
+        loginButton.setOnClickListener(v -> performLogin());
 
         signUpTextView.setOnClickListener(v -> {
             // Navigate to RegisterFragment
             if (getActivity() instanceof WelcomePage) {
-                ((WelcomePage) getActivity()).replaceFragment(new RegisterFragment());
+                ((WelcomePage) getActivity()).navigateToRegister();
             }
         });
+        
         forgetTextView.setOnClickListener(v -> {
-            // Navigate to RegisterFragment
+            // Navigate to ForgetPasswordFragment
             if (getActivity() instanceof WelcomePage) {
-                ((WelcomePage) getActivity()).replaceFragment(new ForgetPasswordFragment());
+                ((WelcomePage) getActivity()).nagvigateToForgetPassword();
+            }
+        });
+    }
+    
+    private void performLogin() {
+        String email = editEmail.getText().toString().trim();
+        String password = editPassword.getText().toString().trim();
+        
+        if (email.isEmpty()) {
+            editEmail.setError("Email is required");
+            return;
+        }
+        
+        if (password.isEmpty()) {
+            editPassword.setError("Password is required");
+            return;
+        }
+        
+        loginButton.setEnabled(false);
+        loginButton.setText("Logging in...");
+        
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                        if (firebaseUser != null) {
+                            fetchUserDataAndLogin(firebaseUser.getUid());
+                        }
+                    } else {
+                        loginButton.setEnabled(true);
+                        loginButton.setText("Log In");
+                        Toast.makeText(getContext(), "Login failed: " + task.getException().getMessage(), 
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+    
+    private void fetchUserDataAndLogin(String uid) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(uid);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    User user = snapshot.getValue(User.class);
+                    if (user != null) {
+                        // Save user data to SharedPreferences
+                        userPreferences.saveUser(user);
+                        
+                        // Navigate to main activity
+                        Intent intent = new Intent(getActivity(), MainActivityDeploy.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }
+                } else {
+                    loginButton.setEnabled(true);
+                    loginButton.setText("Log In");
+                    Toast.makeText(getContext(), "User data not found", Toast.LENGTH_SHORT).show();
+                }
+            }
+            
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                loginButton.setEnabled(true);
+                loginButton.setText("Log In");
+                Toast.makeText(getContext(), "Database error: " + error.getMessage(), 
+                        Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Database error", error.toException());
             }
         });
     }

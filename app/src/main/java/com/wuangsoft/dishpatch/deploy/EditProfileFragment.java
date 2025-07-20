@@ -20,11 +20,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.wuangsoft.dishpatch.R;
 import com.wuangsoft.dishpatch.models.User;
+import com.wuangsoft.dishpatch.utilities.UserPreferences;
 
 public class EditProfileFragment extends Fragment {
 
     private static final String TAG = "EditProfileFragment";
-    private static final String USER_ID = "HCre5W0AT8VzE0i2BCrp42p0Bv43"; // Your Firebase user ID
     
     private EditText editName, editUsername, editPhone, editAddress;
     private ImageView profileAvatar;
@@ -33,6 +33,7 @@ public class EditProfileFragment extends Fragment {
     
     private DatabaseReference userRef;
     private User currentUser;
+    private UserPreferences userPreferences;
 
     public EditProfileFragment() {
         // Required empty public constructor
@@ -40,6 +41,13 @@ public class EditProfileFragment extends Fragment {
 
     public static EditProfileFragment newInstance() {
         return new EditProfileFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        userPreferences = new UserPreferences(getContext());
+        currentUser = userPreferences.getUser();
     }
 
     @Override
@@ -67,7 +75,9 @@ public class EditProfileFragment extends Fragment {
     }
 
     private void setupFirebase() {
-        userRef = FirebaseDatabase.getInstance().getReference().child("users").child(USER_ID);
+        if (currentUser != null) {
+            userRef = FirebaseDatabase.getInstance().getReference().child("users").child(currentUser.getUid());
+        }
     }
 
     private void setupClickListeners() {
@@ -115,6 +125,8 @@ public class EditProfileFragment extends Fragment {
         // Save to Firebase
         userRef.setValue(currentUser)
             .addOnSuccessListener(aVoid -> {
+                // Update SharedPreferences with new user data
+                userPreferences.saveUser(currentUser);
                 Toast.makeText(getContext(), "Profile updated successfully", Toast.LENGTH_SHORT).show();
                 navigateBack();
             })
@@ -126,29 +138,41 @@ public class EditProfileFragment extends Fragment {
     }
 
     private void loadUserData() {
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    currentUser = dataSnapshot.getValue(User.class);
-                    if (currentUser != null) {
-                        updateUI(currentUser);
-                    } else {
-                        Log.e(TAG, "User object is null");
-                        showError("Failed to load user data");
+        if (currentUser != null) {
+            // Use cached user data first
+            updateUI(currentUser);
+            
+            // Also fetch latest data from Firebase if userRef is available
+            if (userRef != null) {
+                userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            User latestUser = dataSnapshot.getValue(User.class);
+                            if (latestUser != null) {
+                                currentUser = latestUser;
+                                userPreferences.saveUser(latestUser); // Update cache
+                                updateUI(latestUser);
+                            } else {
+                                Log.e(TAG, "User object is null");
+                                showError("Failed to load user data");
+                            }
+                        } else {
+                            Log.e(TAG, "User data doesn't exist");
+                            showError("User not found");
+                        }
                     }
-                } else {
-                    Log.e(TAG, "User data doesn't exist");
-                    showError("User not found");
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e(TAG, "Database error: " + databaseError.getMessage());
-                showError("Failed to load user data: " + databaseError.getMessage());
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.e(TAG, "Database error: " + databaseError.getMessage());
+                        showError("Failed to load user data: " + databaseError.getMessage());
+                    }
+                });
             }
-        });
+        } else {
+            showError("No user data found. Please login again.");
+        }
     }
 
     private void updateUI(User user) {

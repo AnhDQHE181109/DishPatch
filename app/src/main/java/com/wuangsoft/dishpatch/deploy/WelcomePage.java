@@ -22,8 +22,13 @@ public class WelcomePage extends AppCompatActivity {
         binding = WelcomePageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        if (savedInstanceState == null) { // Only replace fragment if not restoring from instance state
-            replaceFragment(new LoginFragment()); // Pass initial selected item
+        if (savedInstanceState == null) {
+            String fragment = getIntent().getStringExtra("fragment");
+            if ("register".equals(fragment)) {
+                replaceFragment(new RegisterFragment());
+            } else {
+                replaceFragment(new LoginFragment()); // Default to login
+            }
         }
 
     }
