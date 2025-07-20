@@ -144,6 +144,9 @@ public class ShoppingCartActivity extends AppCompatActivity {
                             adapter.notifyDataSetChanged();
                             calculateSubtotal();
 //                            selectedCartItems.clear();
+                        } else if (currentQuantity == 1) {
+                            // Show confirmation dialog for removing item
+                            showRemoveItemConfirmationDialog(cartItem, dbOps, adapter);
                         }
 
 //                        Log.i(TAG, "Cart item quantity decremented: " + (Long.parseLong(cartItem.getProductQuantity()) - 1));
@@ -366,5 +369,47 @@ public class ShoppingCartActivity extends AppCompatActivity {
             ((TextView)findViewById(R.id.subtotalPriceText))
                     .setText(String.format("%,d", subtotalPrice).replace(',','.') + "₫");
         }
+    }
+    
+    private void showRemoveItemConfirmationDialog(CartItem cartItem, DatabaseOperations dbOps, CartItemAdapter adapter) {
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Remove Item")
+                .setMessage("Do you want to remove \"" + cartItem.getProductName() + "\" from your cart?")
+                .setPositiveButton("Remove", (dialog, which) -> {
+                    // Remove the item from cart using existing method
+                    List<CartItem> itemsToRemove = new ArrayList<>();
+                    itemsToRemove.add(cartItem);
+                    dbOps.removeCartItems(itemsToRemove);
+                    
+                    // Update adapter
+                    adapter.getCartItems().remove(cartItem);
+                    adapter.notifyDataSetChanged();
+                    
+                    // Update selected items if this item was selected
+                    selectedCartItems.remove(cartItem);
+                    fetchedCartItems.remove(cartItem);
+                    
+                    // Update "Select All" checkbox state
+                    CheckBox selectAllCheckBox = findViewById(R.id.selectAllCheckBox);
+                    if (selectAllCheckBox.isChecked() && !fetchedCartItems.isEmpty()) {
+                        selectAllCheckBox.setChecked(false);
+                    }
+                    
+                    // Update UI
+                    calculateSubtotal();
+                    setCartTitle(fetchedCartItems.size());
+                    
+                    // Show empty message if cart is now empty
+                    if (fetchedCartItems.isEmpty()) {
+                        showCartEmptyMessage(true);
+                    }
+                    
+                    Toast.makeText(ShoppingCartActivity.this, "Item removed from cart", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> {
+                    // Do nothing, just dismiss the dialog
+                    dialog.dismiss();
+                })
+                .show();
     }
 }
