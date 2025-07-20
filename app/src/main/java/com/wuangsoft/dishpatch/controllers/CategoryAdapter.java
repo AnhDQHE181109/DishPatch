@@ -35,8 +35,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         holder.textCategory.setText(category.getName());
         Glide.with(holder.itemView.getContext())
                 .load(category.getImageUrl())
-                .placeholder(android.R.color.darker_gray)
-                .error(android.R.drawable.ic_dialog_alert)
                 .into(holder.imageCategory);
     }
 
