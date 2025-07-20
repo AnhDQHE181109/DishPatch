@@ -44,19 +44,47 @@ public class HomeDataProvider {
     public void getMenuItems(final HomeDataCallback.MenuItemCallback callback) {
         dbRef.child("menu_items").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot menuSnapshot) {
                 List<MenuItem> items = new ArrayList<>();
-                for (DataSnapshot child : snapshot.getChildren()) {
+                for (DataSnapshot child : menuSnapshot.getChildren()) {
                     MenuItem item = child.getValue(MenuItem.class);
                     if (item != null) {
-                        // Set the ID from the key if not already set
                         if (item.getId() == null || item.getId().isEmpty()) {
                             item.setId(child.getKey());
                         }
                         items.add(item);
                     }
                 }
-                callback.onMenuItemsLoaded(items);
+
+                // Now fetch reviews and compute average ratings
+                dbRef.child("reviews").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot reviewSnapshot) {
+                        for (MenuItem item : items) {
+                            double total = 0;
+                            int count = 0;
+                            for (DataSnapshot review : reviewSnapshot.getChildren()) {
+                                String dishId = review.child("dishId").getValue(String.class);
+                                if (dishId != null && dishId.equals(item.getId())) {
+                                    Double rating = review.child("rating").getValue(Double.class);
+                                    if (rating != null) {
+                                        total += rating;
+                                        count++;
+                                    }
+                                }
+                            }
+                            double avg = count > 0 ? total / count : 0;
+                            item.setRating(avg);
+                        }
+                        callback.onMenuItemsLoaded(items);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("HomeDataProvider", "Failed to load reviews", error.toException());
+                        callback.onMenuItemsLoaded(items);  // fallback with items without ratings
+                    }
+                });
             }
 
             @Override

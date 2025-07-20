@@ -73,7 +73,7 @@ public class HomeDeployFragment extends Fragment {
 
         recyclerViewCategories.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerViewBestSeller.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        recyclerViewRecommend.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        recyclerViewRecommend.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerViewSearchSuggestions.setLayoutManager(new LinearLayoutManager(getContext()));
 
         recyclerViewCategories.setAdapter(categoryAdapter);
