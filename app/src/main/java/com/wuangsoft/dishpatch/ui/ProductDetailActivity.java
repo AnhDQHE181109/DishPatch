@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.wuangsoft.dishpatch.R;
 import com.wuangsoft.dishpatch.models.CartItemFirebase;
+import com.wuangsoft.dishpatch.models.FavoriteItem;
 import com.wuangsoft.dishpatch.models.MenuItem;
 import com.wuangsoft.dishpatch.utilities.UserPreferences;
 
@@ -35,6 +36,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private int quantity = 1;
     private UserPreferences userPreferences;
     private String currentUserId;
+    private boolean isFavorite = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         getProductDataFromIntent();
         setupClickListeners();
         updateQuantityDisplay();
+        checkFavoriteStatus();
     }
     
     private void initViews() {
@@ -123,8 +126,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         addToCartButton.setOnClickListener(v -> addToCart());
         
         favoriteButton.setOnClickListener(v -> {
-            // TODO: Implement favorite functionality
-            Toast.makeText(this, "Added to favorites", Toast.LENGTH_SHORT).show();
+            toggleFavorite();
         });
     }
     
@@ -207,5 +209,78 @@ public class ProductDetailActivity extends AppCompatActivity {
                             "Database error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+    
+    private void checkFavoriteStatus() {
+        if (menuItem == null || currentUserId == null) return;
+        
+        DatabaseReference favRef = FirebaseDatabase.getInstance()
+                .getReference("favorites")
+                .child(currentUserId)
+                .child(menuItem.getId());
+                
+        favRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                isFavorite = dataSnapshot.exists();
+                updateFavoriteButton();
+            }
+            
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG, "Failed to check favorite status", databaseError.toException());
+            }
+        });
+    }
+    
+    private void updateFavoriteButton() {
+        if (isFavorite) {
+            favoriteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.favouritebuttoniconactive));
+        } else {
+            favoriteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.favouritebuttonicon));
+        }
+    }
+    
+    private void toggleFavorite() {
+        if (menuItem == null || currentUserId == null) return;
+        
+        DatabaseReference favRef = FirebaseDatabase.getInstance()
+                .getReference("favorites")
+                .child(currentUserId)
+                .child(menuItem.getId());
+        
+        if (isFavorite) {
+            // Remove from favorites
+            favRef.removeValue()
+                    .addOnSuccessListener(aVoid -> {
+                        isFavorite = false;
+                        updateFavoriteButton();
+                        Toast.makeText(ProductDetailActivity.this, "Removed from favorites", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "Failed to remove from favorites", e);
+                        Toast.makeText(ProductDetailActivity.this, "Failed to remove from favorites", Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            // Add to favorites
+            FavoriteItem favoriteItem = new FavoriteItem();
+            favoriteItem.setDishId(menuItem.getId());
+            favoriteItem.setName(menuItem.getName());
+            favoriteItem.setDescription(menuItem.getDescription());
+            favoriteItem.setImageUrl(menuItem.getImageUrl());
+            favoriteItem.setPrice(menuItem.getPrice());
+            favoriteItem.setAddedAt(System.currentTimeMillis());
+            
+            favRef.setValue(favoriteItem)
+                    .addOnSuccessListener(aVoid -> {
+                        isFavorite = true;
+                        updateFavoriteButton();
+                        Toast.makeText(ProductDetailActivity.this, "Added to favorites", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "Failed to add to favorites", e);
+                        Toast.makeText(ProductDetailActivity.this, "Failed to add to favorites", Toast.LENGTH_SHORT).show();
+                    });
+        }
     }
 }

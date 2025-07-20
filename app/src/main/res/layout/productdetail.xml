@@ -60,7 +60,7 @@
         app:layout_constraintTop_toTopOf="@+id/backButton2"
         app:srcCompat="@drawable/favouritebuttonicon" />
 
-    <ImageView
+     <ImageView
         android:id="@+id/product"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
