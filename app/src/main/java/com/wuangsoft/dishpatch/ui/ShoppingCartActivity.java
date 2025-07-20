@@ -1,5 +1,6 @@
 package com.wuangsoft.dishpatch.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
@@ -30,6 +31,7 @@ import com.wuangsoft.dishpatch.utilities.DatabaseOperations;
 import com.wuangsoft.dishpatch.utilities.SampleDataGenerator;
 import com.wuangsoft.dishpatch.utilities.UserPreferences;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -207,6 +209,11 @@ public class ShoppingCartActivity extends AppCompatActivity {
                 }
                 Toast.makeText(ShoppingCartActivity.this, selectedItemsResult, Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "selectedItemsResult: " + selectedItemsResult);
+
+                Intent orderConfirmScreen = new Intent(ShoppingCartActivity.this, PaymentConfirmFragment.class);
+                orderConfirmScreen.putExtra("selectedCartItems", (Serializable) selectedCartItems);
+//                orderConfirmScreen.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(orderConfirmScreen);
             }
         });
 
