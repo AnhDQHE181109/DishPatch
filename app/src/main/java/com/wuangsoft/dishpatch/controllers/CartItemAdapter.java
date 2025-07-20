@@ -17,6 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.wuangsoft.dishpatch.R;
 import com.wuangsoft.dishpatch.models.CartItem;
+import com.wuangsoft.dishpatch.utilities.HomeDataCallback;
+import com.wuangsoft.dishpatch.utilities.HomeDataProvider;
+
+import java.util.List;
 
 import java.util.List;
 
@@ -109,6 +113,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
 
         void onDecrementClick(CartItem cartItem);
         void onIncrementClick(CartItem cartItem);
+        void onImageClick(com.wuangsoft.dishpatch.models.MenuItem menuItem);
     }
 
     class CartItemHolder extends RecyclerView.ViewHolder {
@@ -133,7 +138,45 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             productImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i("CartItemAdapter", "productImage onClick called");
+                    if (callback != null) {
+                        CartItem cartItem = cartItems.get(getAdapterPosition());
+                        
+                        // Fetch complete product details from database to ensure description is included
+                        HomeDataProvider dataProvider = new HomeDataProvider();
+                        dataProvider.getMenuItems(new HomeDataCallback.MenuItemCallback() {
+                            @Override
+                            public void onMenuItemsLoaded(List<com.wuangsoft.dishpatch.models.MenuItem> items) {
+                                // Find the matching menu item by ID
+                                com.wuangsoft.dishpatch.models.MenuItem fullMenuItem = null;
+                                for (com.wuangsoft.dishpatch.models.MenuItem item : items) {
+                                    if (item.getId().equals(cartItem.getProductID())) {
+                                        fullMenuItem = item;
+                                        break;
+                                    }
+                                }
+                                
+                                if (fullMenuItem != null) {
+                                    // Pass the complete menu item to the callback
+                                    callback.onImageClick(fullMenuItem);
+                                } else {
+                                    // Fallback: create MenuItem from CartItem data
+                                    com.wuangsoft.dishpatch.models.MenuItem menuItem = new com.wuangsoft.dishpatch.models.MenuItem();
+                                    menuItem.setId(cartItem.getProductID());
+                                    menuItem.setName(cartItem.getProductName());
+                                    menuItem.setImageUrl(cartItem.getProductImageURL());
+                                    // Convert price string to double (remove currency symbols and dots)
+                                    String priceStr = cartItem.getProductPrice().replaceAll("[₫.,]", "");
+                                    try {
+                                        menuItem.setPrice(Double.parseDouble(priceStr));
+                                    } catch (NumberFormatException e) {
+                                        menuItem.setPrice(0.0);
+                                    }
+                                    
+                                    callback.onImageClick(menuItem);
+                                }
+                            }
+                        });
+                    }
                 }
             });
         }

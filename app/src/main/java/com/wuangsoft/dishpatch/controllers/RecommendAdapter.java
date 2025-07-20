@@ -67,6 +67,8 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.Reco
         public RecommendViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.imageRecommend);
+            iconFavorite = itemView.findViewById(R.id.iconFavorite);
+            name = itemView.findViewById(R.id.textRecommendName);
             price = itemView.findViewById(R.id.textPrice);
             rating = itemView.findViewById(R.id.textRating);
         }

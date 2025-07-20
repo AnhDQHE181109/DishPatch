@@ -2,6 +2,7 @@ package com.wuangsoft.dishpatch.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
@@ -36,5 +37,11 @@ public class PaymentConfirmFragment extends AppCompatActivity {
         CheckoutListAdapter adapter = new CheckoutListAdapter(selectedCartItems);
         recView.setLayoutManager(new LinearLayoutManager(this));
         recView.setAdapter(adapter);
+
+        ImageButton backButton = findViewById(R.id.btnBack);
+        backButton.setOnClickListener(v -> {
+            setResult(Activity.RESULT_OK);
+            finish();
+        });
     }
 }

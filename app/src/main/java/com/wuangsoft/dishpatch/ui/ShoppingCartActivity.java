@@ -42,10 +42,15 @@ public class ShoppingCartActivity extends AppCompatActivity {
     private List<CartItem> selectedCartItems = new ArrayList<>();
     private List<CartItem> fetchedCartItems = new ArrayList<>();
     private boolean editMode = true;
-    private MenuItem editModeToggleButton;
+    private android.view.MenuItem editModeToggleButton;
     
     private UserPreferences userPreferences;
     private String currentUserId;
+    private DatabaseOperations dbOps;
+    private CartItemAdapter adapter;
+    private RecyclerView recView;
+    private CheckBox selectAllCheckOut;
+    private boolean isFirstLoad = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,125 +83,21 @@ public class ShoppingCartActivity extends AppCompatActivity {
         shoppingCartToolbar.setNavigationOnClickListener(v -> onBackPressed());
         ((TextView)findViewById(R.id.subtotalPriceText)).setText("0₫");
 
-        CheckBox selectAllCheckOut = findViewById(R.id.selectAllCheckBox);
+        selectAllCheckOut = findViewById(R.id.selectAllCheckBox);
         findViewById(R.id.deleteItemsButton).setVisibility(View.INVISIBLE);
 
         findViewById(R.id.cartEmptyMessage).setVisibility(View.INVISIBLE);
 
-        DatabaseOperations dbOps = new DatabaseOperations(currentUserId);
+        dbOps = new DatabaseOperations(currentUserId);
 
-        RecyclerView recView = findViewById(R.id.cartItemsRecView);
+        recView = findViewById(R.id.cartItemsRecView);
         recView.setLayoutManager(new LinearLayoutManager(this));
-        CartItemAdapter adapter = new CartItemAdapter(new ArrayList<>());
+        adapter = new CartItemAdapter(new ArrayList<>());
         recView.setAdapter(adapter);
 
 //        pushSampleData();
 
-        dbOps.getCartItems(new DatabaseOperations.CartItemCallback() {
-            @Override
-            public void onCallbackGetCartItems(List<CartItem> cartItemsCallback) {
-                findViewById(R.id.dataWaitProgressBar).setVisibility(View.INVISIBLE);
-
-                if (cartItemsCallback.isEmpty()) {
-                    showCartEmptyMessage(true);
-                    return;
-                }
-
-                adapter.setCartItems(cartItemsCallback);
-                adapter.notifyDataSetChanged();
-                fetchedCartItems = cartItemsCallback;
-
-                adapter.setCallback(new CartItemAdapter.Callback() {
-                    @Override
-                    public void onCheckedChanged(CartItem cartItem, boolean isChecked) {
-                        if (isChecked) {
-                            selectedCartItems.add(cartItem);
-                            Log.i(TAG, "ShoppingCartActivity" + "selectedCartItems added an item!");
-                        } else {
-                            selectedCartItems.remove(cartItem);
-                            Log.i(TAG, "ShoppingCartActivity" + "selectedCartItems removed an item!");
-                        }
-
-                        if (selectedCartItems.size() == cartItemsCallback.size()) {
-                            selectAllCheckOut.setChecked(true);
-                        } else {
-                            selectAllCheckOut.setChecked(false);
-                        }
-
-                        calculateSubtotal();
-                        Log.i(TAG, "Cart item checked: " + cartItem.getProductName() + ": " + isChecked);
-//                        Log.i(TAG, "selectedCartItems: " + selectedCartItems.toString());
-                    }
-
-//                    @Override
-//                    public void onClick(CartItem cartItem) {
-//                        if (selectedCartItems.contains(cartItem)) {
-//                            selectedCartItems.remove(cartItem);
-//                        } else {
-//                            selectedCartItems.add(cartItem);
-//                        }
-//                    }
-
-                    @Override
-                    public void onDecrementClick(CartItem cartItem) {
-                        long currentQuantity = Long.parseLong(cartItem.getProductQuantity());
-                        if (currentQuantity > 1) {
-                            cartItem.setProductQuantity(String.valueOf(Long.parseLong(cartItem.getProductQuantity()) - 1));
-                            dbOps.updateCartItemQuantity(cartItem, currentQuantity - 1);
-                            adapter.notifyDataSetChanged();
-                            calculateSubtotal();
-//                            selectedCartItems.clear();
-                        } else if (currentQuantity == 1) {
-                            // Show confirmation dialog for removing item
-                            showRemoveItemConfirmationDialog(cartItem, dbOps, adapter);
-                        }
-
-//                        Log.i(TAG, "Cart item quantity decremented: " + (Long.parseLong(cartItem.getProductQuantity()) - 1));
-                    }
-
-                    @Override
-                    public void onIncrementClick(CartItem cartItem) {
-                        long currentQuantity = Long.parseLong(cartItem.getProductQuantity());
-                        if (currentQuantity < 40) {
-                            cartItem.setProductQuantity(String.valueOf(Long.parseLong(cartItem.getProductQuantity()) + 1));
-                            dbOps.updateCartItemQuantity(cartItem, currentQuantity + 1);
-                            adapter.notifyDataSetChanged();
-                            calculateSubtotal();
-//                            selectedCartItems.clear();
-                        }
-
-//                        Log.i(TAG, "Cart item quantity incremented: " + (Long.parseLong(cartItem.getProductQuantity()) + 1));
-                    }
-                });
-
-                selectAllCheckOut.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        selectedCartItems.clear();
-
-                        if (selectAllCheckOut.isChecked()) {
-                            if (cartItemsCallback.isEmpty()) {
-                                selectAllCheckOut.setChecked(false);
-                                return;
-                            }
-                            for (CartItem cartItem : cartItemsCallback) {
-                                if (!selectedCartItems.contains(cartItem)) {
-                                    selectedCartItems.add(cartItem);
-                                }
-                            }
-                            adapter.selectAll();
-                        } else {
-                            adapter.deSelectAll();
-                        }
-
-                        calculateSubtotal();
-                    }
-                });
-
-                setCartTitle(cartItemsCallback.size());
-                Log.i(TAG, "cartItems: " + cartItemsCallback.toString());
-            }
-        });
+        loadCartData();
 
         Button checkoutButton = findViewById(R.id.checkoutButton);
         checkoutButton.setOnClickListener(new View.OnClickListener() {
@@ -250,6 +151,128 @@ public class ShoppingCartActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh cart data when returning from product detail, but not on first load
+        if (!isFirstLoad) {
+            loadCartData();
+        }
+        isFirstLoad = false;
+    }
+
+    private void loadCartData() {
+        findViewById(R.id.dataWaitProgressBar).setVisibility(View.VISIBLE);
+        findViewById(R.id.cartEmptyMessage).setVisibility(View.INVISIBLE);
+        
+        // Clear previous selections when refreshing
+        selectedCartItems.clear();
+        selectAllCheckOut.setChecked(false);
+        
+        dbOps.getCartItems(new DatabaseOperations.CartItemCallback() {
+            @Override
+            public void onCallbackGetCartItems(List<CartItem> cartItemsCallback) {
+                findViewById(R.id.dataWaitProgressBar).setVisibility(View.INVISIBLE);
+
+                if (cartItemsCallback.isEmpty()) {
+                    showCartEmptyMessage(true);
+                    return;
+                }
+
+                adapter.setCartItems(cartItemsCallback);
+                adapter.notifyDataSetChanged();
+                fetchedCartItems = cartItemsCallback;
+
+                setupAdapterCallback();
+
+                selectAllCheckOut.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selectedCartItems.clear();
+
+                        if (selectAllCheckOut.isChecked()) {
+                            if (cartItemsCallback.isEmpty()) {
+                                selectAllCheckOut.setChecked(false);
+                                return;
+                            }
+                            for (CartItem cartItem : cartItemsCallback) {
+                                if (!selectedCartItems.contains(cartItem)) {
+                                    selectedCartItems.add(cartItem);
+                                }
+                            }
+                            adapter.selectAll();
+                        } else {
+                            adapter.deSelectAll();
+                        }
+
+                        calculateSubtotal();
+                    }
+                });
+
+                setCartTitle(cartItemsCallback.size());
+                calculateSubtotal(); // Recalculate subtotal on refresh
+                Log.i(TAG, "cartItems: " + cartItemsCallback.toString());
+            }
+        });
+    }
+
+    private void setupAdapterCallback() {
+        adapter.setCallback(new CartItemAdapter.Callback() {
+            @Override
+            public void onCheckedChanged(CartItem cartItem, boolean isChecked) {
+                if (isChecked) {
+                    selectedCartItems.add(cartItem);
+                    Log.i(TAG, "ShoppingCartActivity" + "selectedCartItems added an item!");
+                } else {
+                    selectedCartItems.remove(cartItem);
+                    Log.i(TAG, "ShoppingCartActivity" + "selectedCartItems removed an item!");
+                }
+
+                if (selectedCartItems.size() == fetchedCartItems.size()) {
+                    selectAllCheckOut.setChecked(true);
+                } else {
+                    selectAllCheckOut.setChecked(false);
+                }
+
+                calculateSubtotal();
+                Log.i(TAG, "Cart item checked: " + cartItem.getProductName() + ": " + isChecked);
+            }
+
+            @Override
+            public void onDecrementClick(CartItem cartItem) {
+                long currentQuantity = Long.parseLong(cartItem.getProductQuantity());
+                if (currentQuantity > 1) {
+                    cartItem.setProductQuantity(String.valueOf(Long.parseLong(cartItem.getProductQuantity()) - 1));
+                    dbOps.updateCartItemQuantity(cartItem, currentQuantity - 1);
+                    adapter.notifyDataSetChanged();
+                    calculateSubtotal();
+                } else if (currentQuantity == 1) {
+                    // Show confirmation dialog for removing item
+                    showRemoveItemConfirmationDialog(cartItem, dbOps, adapter);
+                }
+            }
+
+            @Override
+            public void onIncrementClick(CartItem cartItem) {
+                long currentQuantity = Long.parseLong(cartItem.getProductQuantity());
+                if (currentQuantity < 40) {
+                    cartItem.setProductQuantity(String.valueOf(Long.parseLong(cartItem.getProductQuantity()) + 1));
+                    dbOps.updateCartItemQuantity(cartItem, currentQuantity + 1);
+                    adapter.notifyDataSetChanged();
+                    calculateSubtotal();
+                }
+            }
+            
+            @Override
+            public void onImageClick(com.wuangsoft.dishpatch.models.MenuItem menuItem) {
+                // Navigate with the complete menu item data (including description)
+                Intent intent = new Intent(ShoppingCartActivity.this, ProductDetailActivity.class);
+                intent.putExtra("menuItem", menuItem);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.shopping_cart_toolbar_menu, menu);
@@ -258,7 +281,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull android.view.MenuItem item) {
 
         if (item.getItemId() == R.id.action_edit_list) {
             editModeToggleButton = item;
