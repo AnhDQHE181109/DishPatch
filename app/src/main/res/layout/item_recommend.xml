@@ -48,6 +48,18 @@
             android:textSize="14sp"
             android:textColor="@android:color/black"
             android:layout_below="@id/imageRecommend"
-            android:layout_margin="8dp"/>
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textRecommendName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Item Name"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_below="@id/textPrice"
+            android:layout_alignStart="@id/textPrice"
+            android:layout_marginBottom="8dp"/>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
