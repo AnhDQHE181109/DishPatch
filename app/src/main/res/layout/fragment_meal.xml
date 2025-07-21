@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".deploy.MealFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/yellow">
+
+        <ImageView
+            android:id="@+id/redback"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline"
+            app:layout_constraintVertical_bias="0.0"
+
+            app:srcCompat="@drawable/orange_rectangle_container" />
+
+        <EditText
+            android:id="@+id/searchbar"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/search_container"
+            android:ems="10"
+            android:fontFamily="@font/league_spartan"
+            android:hint="Search"
+            android:inputType="text"
+            android:paddingLeft="10dp"
+            android:textColor="#B4B4B4"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintEnd_toStartOf="@id/cartbutton"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/cartbutton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/yellow"
+            android:contentDescription="cart"
+            android:onClick="goToShoppingCart"
+            android:scaleType="center"
+            app:layout_constraintEnd_toStartOf="@id/bellbutton"
+            app:layout_constraintTop_toTopOf="@id/searchbar"
+            app:srcCompat="@drawable/cart_icon" />
+
+        <ImageButton
+            android:id="@+id/bellbutton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/yellow"
+            android:contentDescription="notification"
+            android:scaleType="center"
+            app:layout_constraintEnd_toStartOf="@id/accountbutton"
+            app:layout_constraintTop_toTopOf="@id/searchbar"
+            app:srcCompat="@drawable/bell_icon" />
+
+        <ImageButton
+            android:id="@+id/accountbutton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@color/yellow"
+            android:contentDescription="account"
+            android:scaleType="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/searchbar"
+            app:srcCompat="@drawable/account_icon" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.15" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:constraint_referenced_ids="snacksbttn,mealbttn,veganbttn,dessertbttn,drinksbttn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.509"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/redback" />
+
+        <ImageButton
+            android:id="@+id/snacksbttn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:contentDescription="Snack"
+            android:backgroundTint="@color/orange"
+            android:src="@drawable/snack"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="138dp" />
+        <ImageButton
+            android:id="@+id/mealbttn"
+            android:background="@drawable/rectangle_container"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Meal"
+            android:src="@drawable/mealactive"
+            tools:layout_editor_absoluteX="103dp"
+            tools:layout_editor_absoluteY="139dp" />
+
+        <ImageButton
+            android:id="@+id/veganbttn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/orange"
+            android:contentDescription="Vegan"
+            android:src="@drawable/vegan"
+            tools:layout_editor_absoluteX="183dp"
+            tools:layout_editor_absoluteY="385dp" />
+
+        <ImageButton
+            android:id="@+id/dessertbttn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/orange"
+            android:contentDescription="Dessert"
+            android:src="@drawable/dessert"
+            tools:layout_editor_absoluteX="73dp"
+            tools:layout_editor_absoluteY="439dp" />
+
+        <ImageButton
+            android:id="@+id/drinksbttn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/orange"
+            android:contentDescription="Drink"
+            android:src="@drawable/drinks"
+            tools:layout_editor_absoluteX="122dp"
+            tools:layout_editor_absoluteY="285dp" />
+
+        <FrameLayout
+            android:id="@+id/category_content_frame"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/rectangle_container"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/flow2">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/category_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:clipToPadding="false"
+                android:padding="8dp" />
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
