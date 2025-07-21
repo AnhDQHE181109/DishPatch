@@ -104,12 +104,12 @@ public class ShoppingCartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //for debugging selected cart items
-                String selectedItemsResult = "";
-                for (CartItem cartItem : selectedCartItems) {
-                    selectedItemsResult += cartItem.getProductName() + "\n";
-                }
-                Toast.makeText(ShoppingCartActivity.this, selectedItemsResult, Toast.LENGTH_SHORT).show();
-                Log.i(TAG, "selectedItemsResult: " + selectedItemsResult);
+//                String selectedItemsResult = "";
+//                for (CartItem cartItem : selectedCartItems) {
+//                    selectedItemsResult += cartItem.getProductName() + "\n";
+//                }
+//                Toast.makeText(ShoppingCartActivity.this, selectedItemsResult, Toast.LENGTH_SHORT).show();
+//                Log.i(TAG, "selectedItemsResult: " + selectedItemsResult);
 
                 if (selectedCartItems.isEmpty()) {
                     Toast.makeText(ShoppingCartActivity.this, "Please select items to check out!", Toast.LENGTH_SHORT).show();
@@ -119,7 +119,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
                 Intent orderConfirmScreen = new Intent(ShoppingCartActivity.this, PaymentConfirmFragment.class);
                 orderConfirmScreen.putExtra("selectedCartItems", (Serializable) selectedCartItems);
 //                orderConfirmScreen.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                orderConfirmScreen.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                orderConfirmScreen.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(orderConfirmScreen);
             }
         });
