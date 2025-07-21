@@ -45,6 +45,9 @@
             android:name=".ui.PaymentConfirmFragment"
             android:exported="false" />
         <activity
+            android:name=".ui.OrderCompleteActivity"
+            android:exported="false" />
+        <activity
             android:name=".deploy.MainActivityDeploy"
             android:exported="false"
             android:label="@string/app_name" />

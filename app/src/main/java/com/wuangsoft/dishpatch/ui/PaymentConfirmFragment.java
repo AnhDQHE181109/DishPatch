@@ -13,12 +13,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.wuangsoft.dishpatch.R;
 import com.wuangsoft.dishpatch.controllers.CheckoutListAdapter;
-import com.wuangsoft.dishpatch.deploy.WelcomeActivity;
 import com.wuangsoft.dishpatch.models.CartItem;
 import com.wuangsoft.dishpatch.utilities.DatabaseOperations;
 import com.wuangsoft.dishpatch.utilities.UserPreferences;
@@ -49,7 +50,6 @@ public class PaymentConfirmFragment extends AppCompatActivity {
 
         userPreferences = new UserPreferences(this);
         currentUserId = userPreferences.getUserId();
-        DatabaseOperations dbOps = new DatabaseOperations(currentUserId, DatabaseOperations.ORDERS);
 
         ImageButton backButton = findViewById(R.id.btnBack);
         backButton.setOnClickListener(v -> {
@@ -62,9 +62,15 @@ public class PaymentConfirmFragment extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (selectedCartItems != null) {
-//                    dbOps.createOrder(selectedCartItems);
-                    Intent homescreen = new Intent(PaymentConfirmFragment.this, WelcomeActivity.class);
-                    startActivity(homescreen);
+                    DatabaseOperations dbOps = new DatabaseOperations(currentUserId, DatabaseOperations.ORDERS);
+
+                    dbOps.createOrder(selectedCartItems);
+                    dbOps = new DatabaseOperations(currentUserId, DatabaseOperations.CART);
+                    dbOps.removeCartItems(selectedCartItems);
+
+                    Intent orderComplete = new Intent(PaymentConfirmFragment.this, OrderCompleteActivity.class);
+                    startActivity(orderComplete);
+                    finish();
                 }
             }
         });
