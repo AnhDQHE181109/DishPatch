@@ -75,6 +75,8 @@ public class OrdersDeployFragment extends Fragment implements OrderHistoryAdapte
 
         // Fetch all orders for the current user from Firebase
         fetchAllUserOrders();
+
+        btnActive.callOnClick();
     }
 
     /**

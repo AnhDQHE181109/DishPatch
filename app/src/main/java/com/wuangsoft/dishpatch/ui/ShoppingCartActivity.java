@@ -118,6 +118,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
 
                 Intent orderConfirmScreen = new Intent(ShoppingCartActivity.this, PaymentConfirmFragment.class);
                 orderConfirmScreen.putExtra("selectedCartItems", (Serializable) selectedCartItems);
+
 //                orderConfirmScreen.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                orderConfirmScreen.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(orderConfirmScreen);
@@ -164,6 +165,8 @@ public class ShoppingCartActivity extends AppCompatActivity {
             loadCartData();
         }
         isFirstLoad = false;
+        adapter.getCartItems().clear();
+        setCartTitle(adapter.getCartItems().size());
         adapter.deSelectAll();
     }
 
