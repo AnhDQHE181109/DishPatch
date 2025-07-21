@@ -1,5 +1,7 @@
 package com.wuangsoft.dishpatch.controllers;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.wuangsoft.dishpatch.R;
 import com.wuangsoft.dishpatch.models.MenuItem;
+import com.wuangsoft.dishpatch.ui.ProductDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +34,12 @@ public class SearchSuggestionAdapter extends RecyclerView.Adapter<RecyclerView.V
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == TYPE_EMPTY) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_search_empty, parent, false);
+            View view = inflater.inflate(R.layout.item_search_empty, parent, false);
             return new EmptyViewHolder(view);
         } else {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_search_suggestion, parent, false);
+            View view = inflater.inflate(R.layout.item_search_suggestion, parent, false);
             return new ResultViewHolder(view);
         }
     }
@@ -47,11 +49,22 @@ public class SearchSuggestionAdapter extends RecyclerView.Adapter<RecyclerView.V
         if (holder instanceof ResultViewHolder && !menuItemList.isEmpty()) {
             MenuItem item = menuItemList.get(position);
             ResultViewHolder resultHolder = (ResultViewHolder) holder;
+
             resultHolder.nameTextView.setText(item.getName());
-            resultHolder.priceTextView.setText(item.getPrice() + "đ");
+            resultHolder.priceTextView.setText(String.format("%,.0f₫", item.getPrice()).replace(',', '.'));
             Glide.with(resultHolder.itemView.getContext())
                     .load(item.getImageUrl())
+                    .placeholder(R.drawable.home_icon)
+                    .error(R.drawable.home_icon)
                     .into(resultHolder.imageView);
+
+            // ✅ Launch product detail on click
+            resultHolder.itemView.setOnClickListener(v -> {
+                Context context = v.getContext();
+                Intent intent = new Intent(context, ProductDetailActivity.class);
+                intent.putExtra("menuItem", item);
+                context.startActivity(intent);
+            });
         }
     }
 
@@ -61,11 +74,10 @@ public class SearchSuggestionAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     public void setMenuItems(List<MenuItem> items) {
-        this.menuItemList = items;
+        this.menuItemList = items != null ? items : new ArrayList<>();
         notifyDataSetChanged();
     }
 
-    // ViewHolder for actual results
     static class ResultViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView nameTextView;
@@ -79,7 +91,6 @@ public class SearchSuggestionAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
-    // ViewHolder for empty message
     static class EmptyViewHolder extends RecyclerView.ViewHolder {
         public EmptyViewHolder(@NonNull View itemView) {
             super(itemView);
