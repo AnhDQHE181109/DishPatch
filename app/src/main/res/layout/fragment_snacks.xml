@@ -71,6 +71,7 @@
         android:layout_height="48dp"
         android:background="@color/yellow"
         android:contentDescription="account"
+        android:onClick="goToAccount"
         android:scaleType="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/searchbar"
