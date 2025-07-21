@@ -1,49 +1,28 @@
 package com.wuangsoft.dishpatch.deploy;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.wuangsoft.dishpatch.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ExploreDeployFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ExploreDeployFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String ARG_CATEGORY = "category";
+    private String selectedCategory = "snacks"; // Default category
 
     public ExploreDeployFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ExploreDeployFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ExploreDeployFragment newInstance(String param1, String param2) {
+    public static ExploreDeployFragment newInstance(String category) {
         ExploreDeployFragment fragment = new ExploreDeployFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_CATEGORY, category);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,15 +31,45 @@ public class ExploreDeployFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            selectedCategory = getArguments().getString(ARG_CATEGORY, "snacks");
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_explore_deploy, container, false);
+        // Use the simple explore layout as container
+        View root = inflater.inflate(R.layout.fragment_explore_deploy, container, false);
+        
+        showCategoryFragment();
+        
+        return root;
+    }
+    
+    private void showCategoryFragment() {
+        Fragment categoryFragment;
+        
+        switch (selectedCategory) {
+            case "meal":
+                categoryFragment = new MealFragment();
+                break;
+            case "vegan":
+                categoryFragment = new VeganFragment();
+                break;
+            case "dessert":
+                categoryFragment = new DessertFragment();
+                break;
+            case "drinks":
+                categoryFragment = new DrinksFragment();
+                break;
+            default:
+                categoryFragment = new SnacksFragment();
+                break;
+        }
+        
+        // Replace the entire explore container with the category fragment
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.explore_container, categoryFragment);
+        transaction.commit();
     }
 }

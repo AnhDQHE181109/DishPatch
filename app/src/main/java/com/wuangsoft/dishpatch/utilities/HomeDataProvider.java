@@ -17,9 +17,13 @@ import java.util.List;
 
 public class HomeDataProvider {
     private final DatabaseReference dbRef;
+    private final DatabaseReference menuItemsRef;
+    private final DatabaseReference ratingsRef;
 
     public HomeDataProvider() {
         dbRef = FirebaseDatabase.getInstance().getReference();
+        menuItemsRef = dbRef.child("menu_items");
+        ratingsRef = dbRef.child("reviews");
     }
 
     public void getCategories(final HomeDataCallback.CategoryCallback callback) {
@@ -42,7 +46,7 @@ public class HomeDataProvider {
     }
 
     public void getMenuItems(final HomeDataCallback.MenuItemCallback callback) {
-        dbRef.child("menu_items").addListenerForSingleValueEvent(new ValueEventListener() {
+        menuItemsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot menuSnapshot) {
                 List<MenuItem> items = new ArrayList<>();
@@ -57,7 +61,7 @@ public class HomeDataProvider {
                 }
 
                 // Now fetch reviews and compute average ratings
-                dbRef.child("reviews").addListenerForSingleValueEvent(new ValueEventListener() {
+                ratingsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot reviewSnapshot) {
                         for (MenuItem item : items) {
@@ -90,6 +94,58 @@ public class HomeDataProvider {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e("HomeDataProvider", "Failed to load menu items", error.toException());
+            }
+        });
+    }
+    
+    public void getMenuItemsByCategory(String categoryId, final HomeDataCallback.MenuItemCallback callback) {
+        menuItemsRef.orderByChild("categoryId").equalTo(categoryId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<MenuItem> items = new ArrayList<>();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    MenuItem item = child.getValue(MenuItem.class);
+                    if (item != null) {
+                        item.setId(child.getKey());
+                        items.add(item);
+                    }
+                }
+                
+                // Get ratings for each item
+                ratingsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (MenuItem item : items) {
+                            double totalRating = 0;
+                            int ratingCount = 0;
+                            
+                            if (snapshot.child(item.getId()).exists()) {
+                                for (DataSnapshot ratingSnapshot : snapshot.child(item.getId()).getChildren()) {
+                                    Double rating = ratingSnapshot.getValue(Double.class);
+                                    if (rating != null) {
+                                        totalRating += rating;
+                                        ratingCount++;
+                                    }
+                                }
+                                if (ratingCount > 0) {
+                                    item.setRating(totalRating / ratingCount);
+                                }
+                            }
+                        }
+                        callback.onMenuItemsLoaded(items);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("HomeDataProvider", "Failed to load ratings for category items", error.toException());
+                        callback.onMenuItemsLoaded(items);  // fallback with items without ratings
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("HomeDataProvider", "Failed to load menu items by category", error.toException());
             }
         });
     }

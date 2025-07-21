@@ -125,4 +125,13 @@ public class MainActivityDeploy extends AppCompatActivity {
 //        shoppingCartIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(shoppingCartIntent);
     }
+    
+    public void navigateToExploreWithCategory(String categoryName) {
+        // Switch to explore tab
+        binding.BottomNav.setSelectedItemId(R.id.explore_button);
+        
+        // Create ExploreDeployFragment with category
+        ExploreDeployFragment exploreFragment = ExploreDeployFragment.newInstance(categoryName);
+        replaceFragment(exploreFragment, R.id.explore_button);
+    }
 }
