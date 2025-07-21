@@ -71,7 +71,6 @@ public class ForgetPasswordFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_forget_password, container, false);
 
         binding = FragmentForgetPasswordBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -79,18 +78,9 @@ public class ForgetPasswordFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        TextView LoginTextView = view.findViewById(R.id.switchtoLogin);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        // --- Set Click Listeners ---
-
-//        LoginTextView.setOnClickListener(v -> {
-//            // Navigate to RegisterFragment
-//            if (getActivity() instanceof WelcomePage) {
-//                ((WelcomePage) getActivity()).replaceFragment(new LoginFragment());
-//            }
-//        });
 
         binding.switchtoLogin.setOnClickListener(v -> {
             if (getActivity() instanceof WelcomePage) {
