@@ -13,17 +13,27 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.wuangsoft.dishpatch.models.CartItem;
 import com.wuangsoft.dishpatch.models.CartItemFirebase;
+import com.wuangsoft.dishpatch.models.OrderCreateItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseOperations {
 
+    public static final int CART = 0;
+    public static final int ORDERS = 1;
     private DatabaseReference firebaseDatabase;
     private static final String TAG = DatabaseOperations.class.getSimpleName();
 
-    public DatabaseOperations(String userID) {
-        firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("carts").child(userID);
+    public DatabaseOperations(String userID, int type) {
+        switch (type) {
+            case CART:
+                firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("carts").child(userID);
+                break;
+            case ORDERS:
+                firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("Orders").child(userID);
+                break;
+        }
     }
 
     public void getCartItemsOnce(String userID) {
@@ -137,6 +147,31 @@ public class DatabaseOperations {
 
     public void addCartItemWithID(String id, CartItemFirebase cartItemFirebase) {
         firebaseDatabase.child(id).setValue(cartItemFirebase);
+    }
+
+    public void createOrder(List<CartItem> cartItems) {
+        String orderID = FirebaseDatabase.getInstance().getReference().push().getKey();
+        long totalPrice = 0;
+
+        for (CartItem cartItem : cartItems) {
+            totalPrice += Long.parseLong(cartItem.getProductPrice()) *
+                    Long.parseLong(cartItem.getProductQuantity());
+        }
+        OrderCreateItem orderCreateItem = new OrderCreateItem(System.currentTimeMillis(), "pending", totalPrice);
+        firebaseDatabase.child(orderID).setValue(orderCreateItem);
+
+        int position = 0;
+        for (CartItem cartItem : cartItems) {
+            // Convert CartItem to CartItemFirebase
+            String dishId = cartItem.getProductID();
+            String imageUrl = cartItem.getProductImageURL();
+            String name = cartItem.getProductName();
+            Long pricePerItem = Long.parseLong(cartItem.getProductPrice());
+            Long quantity = Long.parseLong(cartItem.getProductQuantity());
+
+            CartItemFirebase cartItemFirebase = new CartItemFirebase(dishId, imageUrl, name, pricePerItem, quantity);
+            firebaseDatabase.child(orderID).child("items").child(String.valueOf(position++)).setValue(cartItemFirebase);
+        }
     }
 
     public interface CartItemCallback {

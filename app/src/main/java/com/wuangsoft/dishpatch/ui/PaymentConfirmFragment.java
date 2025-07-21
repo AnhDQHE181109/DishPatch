@@ -1,7 +1,10 @@
 package com.wuangsoft.dishpatch.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
@@ -15,11 +18,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.wuangsoft.dishpatch.R;
 import com.wuangsoft.dishpatch.controllers.CheckoutListAdapter;
+import com.wuangsoft.dishpatch.deploy.WelcomeActivity;
 import com.wuangsoft.dishpatch.models.CartItem;
+import com.wuangsoft.dishpatch.utilities.DatabaseOperations;
+import com.wuangsoft.dishpatch.utilities.UserPreferences;
 
 import java.util.List;
 
 public class PaymentConfirmFragment extends AppCompatActivity {
+
+    private UserPreferences userPreferences;
+    private String currentUserId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,10 +47,26 @@ public class PaymentConfirmFragment extends AppCompatActivity {
         recView.setLayoutManager(new LinearLayoutManager(this));
         recView.setAdapter(adapter);
 
+        userPreferences = new UserPreferences(this);
+        currentUserId = userPreferences.getUserId();
+        DatabaseOperations dbOps = new DatabaseOperations(currentUserId, DatabaseOperations.ORDERS);
+
         ImageButton backButton = findViewById(R.id.btnBack);
         backButton.setOnClickListener(v -> {
             setResult(Activity.RESULT_OK);
             finish();
+        });
+
+        Button payNowButton = findViewById(R.id.btnPayNow);
+        payNowButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedCartItems != null) {
+//                    dbOps.createOrder(selectedCartItems);
+                    Intent homescreen = new Intent(PaymentConfirmFragment.this, WelcomeActivity.class);
+                    startActivity(homescreen);
+                }
+            }
         });
     }
 }

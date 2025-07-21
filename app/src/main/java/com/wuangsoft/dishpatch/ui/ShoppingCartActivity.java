@@ -88,7 +88,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
 
         findViewById(R.id.cartEmptyMessage).setVisibility(View.INVISIBLE);
 
-        dbOps = new DatabaseOperations(currentUserId);
+        dbOps = new DatabaseOperations(currentUserId, DatabaseOperations.CART);
 
         recView = findViewById(R.id.cartItemsRecView);
         recView.setLayoutManager(new LinearLayoutManager(this));
@@ -111,9 +111,15 @@ public class ShoppingCartActivity extends AppCompatActivity {
                 Toast.makeText(ShoppingCartActivity.this, selectedItemsResult, Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "selectedItemsResult: " + selectedItemsResult);
 
+                if (selectedCartItems.isEmpty()) {
+                    Toast.makeText(ShoppingCartActivity.this, "Please select items to check out!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Intent orderConfirmScreen = new Intent(ShoppingCartActivity.this, PaymentConfirmFragment.class);
                 orderConfirmScreen.putExtra("selectedCartItems", (Serializable) selectedCartItems);
 //                orderConfirmScreen.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                orderConfirmScreen.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(orderConfirmScreen);
             }
         });
@@ -158,6 +164,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
             loadCartData();
         }
         isFirstLoad = false;
+        adapter.deSelectAll();
     }
 
     private void loadCartData() {
@@ -376,7 +383,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
     }
 
     public void pushSampleData() {
-        DatabaseOperations dbOps = new DatabaseOperations("user01");
+        DatabaseOperations dbOps = new DatabaseOperations("user01", DatabaseOperations.CART);
         SampleDataGenerator sag = new SampleDataGenerator();
         List<CartItemFirebase> firebaseCartItems = sag.generateFirebaseSampleData();
 

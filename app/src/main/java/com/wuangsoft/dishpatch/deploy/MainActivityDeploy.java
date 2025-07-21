@@ -122,7 +122,7 @@ public class MainActivityDeploy extends AppCompatActivity {
 
     public void goToShoppingCart(View view) {
         Intent shoppingCartIntent = new Intent(this, ShoppingCartActivity.class);
-//        shoppingCartIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        shoppingCartIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(shoppingCartIntent);
     }
 }
