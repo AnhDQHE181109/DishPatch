@@ -58,7 +58,7 @@ public class HomeDeployFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home_deploy, container, false);
 
-        recyclerViewCategories = root.findViewById(R.id.recyclerViewCategories);
+
         recyclerViewBestSeller = root.findViewById(R.id.recyclerViewBestSeller);
         recyclerViewRecommend = root.findViewById(R.id.recyclerViewRecommend);
         recyclerViewSearchSuggestions = root.findViewById(R.id.recyclerViewSearchSuggestions);
@@ -72,12 +72,12 @@ public class HomeDeployFragment extends Fragment {
         recommendAdapter = new RecommendAdapter();
         searchSuggestionAdapter = new SearchSuggestionAdapter();
 
-        recyclerViewCategories.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+
         recyclerViewBestSeller.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerViewRecommend.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerViewSearchSuggestions.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        recyclerViewCategories.setAdapter(categoryAdapter);
+
         recyclerViewBestSeller.setAdapter(bestSellerAdapter);
         recyclerViewRecommend.setAdapter(recommendAdapter);
         recyclerViewSearchSuggestions.setAdapter(searchSuggestionAdapter);
@@ -92,12 +92,27 @@ public class HomeDeployFragment extends Fragment {
             transaction.addToBackStack(null);
             transaction.commit();
         });
+        
+        // Setup cart button click listener
+//        ImageButton cartButton = root.findViewById(R.id.cartbutton);
+//        cartButton.setOnClickListener(v -> {
+//            // Navigate to ShoppingCartActivity
+//            Intent intent = new Intent(getActivity(), ShoppingCartActivity.class);
+//            startActivity(intent);
+//        });
 
-        ImageButton cartButton = root.findViewById(R.id.cartbutton);
-        cartButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), ShoppingCartActivity.class);
-            startActivity(intent);
-        });
+        // Category button click listeners
+        ImageButton snacksButton = root.findViewById(R.id.snacksbttn);
+        ImageButton mealButton = root.findViewById(R.id.mealbttn);
+        ImageButton veganButton = root.findViewById(R.id.veganbttn);
+        ImageButton dessertButton = root.findViewById(R.id.dessertbttn);
+        ImageButton drinksButton = root.findViewById(R.id.drinksbttn);
+        
+        snacksButton.setOnClickListener(v -> navigateToCategory("snacks"));
+        mealButton.setOnClickListener(v -> navigateToCategory("meal"));
+        veganButton.setOnClickListener(v -> navigateToCategory("vegan"));
+        dessertButton.setOnClickListener(v -> navigateToCategory("dessert"));
+        drinksButton.setOnClickListener(v -> navigateToCategory("drinks"));
 
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
@@ -156,4 +171,10 @@ public class HomeDeployFragment extends Fragment {
         });
     }
 
+    private void navigateToCategory(String categoryName) {
+        // Get the parent activity and call the navigation method
+        if (getActivity() instanceof MainActivityDeploy) {
+            ((MainActivityDeploy) getActivity()).navigateToExploreWithCategory(categoryName);
+        }
+    }
 }

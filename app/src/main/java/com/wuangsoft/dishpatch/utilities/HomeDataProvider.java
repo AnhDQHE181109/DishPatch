@@ -18,9 +18,13 @@ import java.util.List;
 
 public class HomeDataProvider {
     private final DatabaseReference dbRef;
+    private final DatabaseReference menuItemsRef;
+    private final DatabaseReference ratingsRef;
 
     public HomeDataProvider() {
         dbRef = FirebaseDatabase.getInstance().getReference();
+        menuItemsRef = dbRef.child("menu_items");
+        ratingsRef = dbRef.child("reviews");
     }
 
     public void getCategories(final HomeDataCallback.CategoryCallback callback) {
@@ -43,7 +47,7 @@ public class HomeDataProvider {
     }
 
     public void getMenuItems(final HomeDataCallback.MenuItemCallback callback) {
-        dbRef.child("menu_items").addListenerForSingleValueEvent(new ValueEventListener() {
+        menuItemsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot menuSnapshot) {
                 List<MenuItem> items = new ArrayList<>();
@@ -56,9 +60,12 @@ public class HomeDataProvider {
                         items.add(item);
                     }
                 }
-
                 // Step 1: Get ratings
                 dbRef.child("reviews").addListenerForSingleValueEvent(new ValueEventListener() {
+
+                // Now fetch reviews and compute average ratings
+                ratingsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
                     @Override
                     public void onDataChange(@NonNull DataSnapshot reviewSnapshot) {
                         for (MenuItem item : items) {
@@ -124,5 +131,4 @@ public class HomeDataProvider {
             }
         });
     }
-
 }

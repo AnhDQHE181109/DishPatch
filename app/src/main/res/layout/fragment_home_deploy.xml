@@ -96,33 +96,18 @@
         app:layout_constraintTop_toTopOf="@id/searchbar"
         app:srcCompat="@drawable/account_icon" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewCategories"
-        android:layout_width="0dp"
-        android:layout_height="110dp"
-        android:layout_marginTop="8dp"
-        android:clipToPadding="false"
-        android:orientation="horizontal"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/imageView"
-        tools:listitem="@layout/item_category" />
-
     <TextView
         android:id="@+id/bestSellerTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:text="Best Seller"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recyclerViewCategories" />
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <TextView
         android:id="@+id/viewAllBestSeller"
@@ -187,5 +172,121 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.15" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:constraint_referenced_ids="snacksbttn,mealbttn,veganbttn,dessertbttn,drinksbttn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+    <ImageButton
+        android:id="@+id/snacksbttn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/background_white"
+        android:contentDescription="Snack"
+        android:paddingBottom="0dp"
+        app:srcCompat="@drawable/snack"
+        tools:layout_editor_absoluteX="37dp"
+        tools:layout_editor_absoluteY="150dp" />
+
+    <ImageButton
+        android:id="@+id/mealbttn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/background_white"
+        android:contentDescription="meal"
+        android:paddingBottom="0dp"
+        app:srcCompat="@drawable/meal"
+        tools:layout_editor_absoluteX="136dp"
+        tools:layout_editor_absoluteY="168dp" />
+
+    <ImageButton
+        android:id="@+id/veganbttn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/background_white"
+        android:contentDescription="vegan"
+        android:paddingBottom="0dp"
+        app:srcCompat="@drawable/vegan"
+        tools:layout_editor_absoluteX="229dp"
+        tools:layout_editor_absoluteY="153dp" />
+
+    <ImageButton
+        android:id="@+id/dessertbttn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/background_white"
+        android:contentDescription="dessert"
+        android:paddingBottom="0dp"
+        app:srcCompat="@drawable/dessert"
+        tools:layout_editor_absoluteX="205dp"
+        tools:layout_editor_absoluteY="280dp" />
+
+    <ImageButton
+        android:id="@+id/drinksbttn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/background_white"
+        android:contentDescription="dribks"
+        android:paddingBottom="0dp"
+        app:srcCompat="@drawable/drinks"
+        tools:layout_editor_absoluteX="231dp"
+        tools:layout_editor_absoluteY="428dp" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/league_spartan"
+        android:text="Snacks"
+        app:layout_constraintEnd_toEndOf="@+id/snacksbttn"
+        app:layout_constraintHorizontal_bias="0.464"
+        app:layout_constraintStart_toStartOf="@+id/flow4"
+        app:layout_constraintTop_toBottomOf="@+id/snacksbttn" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/league_spartan"
+        android:text="Meal"
+        app:layout_constraintEnd_toEndOf="@+id/mealbttn"
+        app:layout_constraintStart_toEndOf="@+id/snacksbttn"
+        app:layout_constraintTop_toBottomOf="@+id/mealbttn" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/league_spartan"
+        android:text="Vegan"
+        app:layout_constraintEnd_toEndOf="@+id/veganbttn"
+        app:layout_constraintStart_toEndOf="@+id/mealbttn"
+        app:layout_constraintTop_toBottomOf="@+id/flow4" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/league_spartan"
+        android:text="Dessert"
+        app:layout_constraintEnd_toEndOf="@+id/dessertbttn"
+        app:layout_constraintStart_toEndOf="@+id/veganbttn"
+        app:layout_constraintTop_toBottomOf="@+id/dessertbttn" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/league_spartan"
+        android:text="Drinks"
+        app:layout_constraintEnd_toEndOf="@+id/flow4"
+        app:layout_constraintStart_toEndOf="@+id/dessertbttn"
+        app:layout_constraintTop_toBottomOf="@+id/drinksbttn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

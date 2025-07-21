@@ -14,7 +14,7 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="52dp"
         android:background="@color/yellow"
-        android:contentDescription="back to welcome"
+        android:contentDescription="Back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/back_arrow" />
