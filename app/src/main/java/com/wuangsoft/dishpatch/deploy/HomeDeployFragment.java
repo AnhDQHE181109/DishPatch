@@ -32,6 +32,7 @@ import com.wuangsoft.dishpatch.controllers.RecommendAdapter;
 import com.wuangsoft.dishpatch.controllers.SearchSuggestionAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HomeDeployFragment extends Fragment {
@@ -140,12 +141,19 @@ public class HomeDeployFragment extends Fragment {
         dataProvider.getMenuItems(new HomeDataCallback.MenuItemCallback() {
             @Override
             public void onMenuItemsLoaded(List<MenuItem> items) {
+                allMenuItems = new ArrayList<>(items);
+
+                // Best Seller (sorted by price as placeholder logic)
                 List<MenuItem> best = new ArrayList<>(items);
-                best.sort((a, b) -> (int) (b.getPrice() - a.getPrice()));
+                best.sort((a, b) -> Double.compare(b.getPrice(), a.getPrice()));
                 bestSellerAdapter.setItems(best.subList(0, Math.min(best.size(), 5)));
-                recommendAdapter.setItems(items);
-                allMenuItems = items;
+
+                // Recommend: Shuffle and pick unique items
+                Collections.shuffle(items);
+                int recommendCount = Math.min(6, items.size());
+                recommendAdapter.setItems(items.subList(0, recommendCount));
             }
         });
     }
+
 }

@@ -13,6 +13,7 @@ import com.wuangsoft.dishpatch.models.Category;
 import com.wuangsoft.dishpatch.models.MenuItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class HomeDataProvider {
@@ -56,7 +57,7 @@ public class HomeDataProvider {
                     }
                 }
 
-                // Now fetch reviews and compute average ratings
+                // Step 1: Get ratings
                 dbRef.child("reviews").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot reviewSnapshot) {
@@ -76,13 +77,43 @@ public class HomeDataProvider {
                             double avg = count > 0 ? total / count : 0;
                             item.setRating(avg);
                         }
-                        callback.onMenuItemsLoaded(items);
+
+                        // Step 2: Get orders for best sellers
+                        dbRef.child("Orders").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot orderSnapshot) {
+                                // Count dishId appearances
+                                HashMap<String, Integer> orderCountMap = new HashMap<>();
+                                for (DataSnapshot order : orderSnapshot.getChildren()) {
+                                    for (DataSnapshot itemSnap : order.getChildren()) {
+                                        String dishId = itemSnap.child("dishId").getValue(String.class);
+                                        if (dishId != null) {
+                                            int prev = orderCountMap.getOrDefault(dishId, 0);
+                                            orderCountMap.put(dishId, prev + 1);
+                                        }
+                                    }
+                                }
+
+                                // Attach count to MenuItem
+                                for (MenuItem item : items) {
+                                    item.setOrderCount(orderCountMap.getOrDefault(item.getId(), 0));
+                                }
+
+                                callback.onMenuItemsLoaded(items);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Log.e("HomeDataProvider", "Failed to load orders", error.toException());
+                                callback.onMenuItemsLoaded(items);
+                            }
+                        });
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         Log.e("HomeDataProvider", "Failed to load reviews", error.toException());
-                        callback.onMenuItemsLoaded(items);  // fallback with items without ratings
+                        callback.onMenuItemsLoaded(items);
                     }
                 });
             }
@@ -93,4 +124,5 @@ public class HomeDataProvider {
             }
         });
     }
+
 }
