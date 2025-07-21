@@ -91,12 +91,14 @@ public class HomeDeployFragment extends Fragment {
             transaction.addToBackStack(null);
             transaction.commit();
         });
-
-        ImageButton cartButton = root.findViewById(R.id.cartbutton);
-        cartButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), ShoppingCartActivity.class);
-            startActivity(intent);
-        });
+        
+        // Setup cart button click listener
+//        ImageButton cartButton = root.findViewById(R.id.cartbutton);
+//        cartButton.setOnClickListener(v -> {
+//            // Navigate to ShoppingCartActivity
+//            Intent intent = new Intent(getActivity(), ShoppingCartActivity.class);
+//            startActivity(intent);
+//        });
 
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
