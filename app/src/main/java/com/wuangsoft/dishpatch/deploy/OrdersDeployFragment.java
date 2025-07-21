@@ -190,10 +190,13 @@ public class OrdersDeployFragment extends Fragment implements OrderHistoryAdapte
         int activeColor = ContextCompat.getColor(getContext(), R.color.button_active_background);
         if ("pending".equalsIgnoreCase(activeStatus)) {
             btnActive.setBackgroundColor(activeColor);
+            btnActive.setTextColor(getResources().getColor(R.color.white));
         } else if ("delivered".equalsIgnoreCase(activeStatus)) {
             btnCompleted.setBackgroundColor(activeColor);
+            btnCompleted.setTextColor(getResources().getColor(R.color.white));
         } else if ("cancelled".equalsIgnoreCase(activeStatus)) {
             btnCancelled.setBackgroundColor(activeColor);
+            btnCancelled.setTextColor(getResources().getColor(R.color.white));
         }
     }
 
