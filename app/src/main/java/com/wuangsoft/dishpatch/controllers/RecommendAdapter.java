@@ -38,16 +38,24 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.Reco
     @Override
     public void onBindViewHolder(@NonNull RecommendViewHolder holder, int position) {
         MenuItem item = items.get(position);
+
         Glide.with(holder.itemView.getContext())
                 .load(item.getImageUrl())
                 .placeholder(R.drawable.home_icon)
                 .error(R.drawable.home_icon)
                 .into(holder.image);
+
         holder.price.setText(String.format("%,.0f₫", item.getPrice()).replace(',', '.'));
 
-        // You can comment this if not used anymore:
-        holder.rating.setVisibility(View.GONE);
+        // Format rating like "4.5 ★" or "No rating"
+        double ratingValue = item.getRating();
+        if (ratingValue > 0) {
+            holder.rating.setText(String.format("%.1f ★", ratingValue));
+        } else {
+            holder.rating.setText("No rating");
+        }
 
+        // Set click listener
         holder.itemView.setOnClickListener(v -> {
             Context context = holder.itemView.getContext();
             Intent intent = new Intent(context, ProductDetailActivity.class);
