@@ -13,7 +13,6 @@ import com.wuangsoft.dishpatch.models.Category;
 import com.wuangsoft.dishpatch.models.MenuItem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class HomeDataProvider {
@@ -60,12 +59,9 @@ public class HomeDataProvider {
                         items.add(item);
                     }
                 }
-                // Step 1: Get ratings
-                dbRef.child("reviews").addListenerForSingleValueEvent(new ValueEventListener() {
 
                 // Now fetch reviews and compute average ratings
                 ratingsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-
                     @Override
                     public void onDataChange(@NonNull DataSnapshot reviewSnapshot) {
                         for (MenuItem item : items) {
@@ -84,43 +80,13 @@ public class HomeDataProvider {
                             double avg = count > 0 ? total / count : 0;
                             item.setRating(avg);
                         }
-
-                        // Step 2: Get orders for best sellers
-                        dbRef.child("Orders").addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot orderSnapshot) {
-                                // Count dishId appearances
-                                HashMap<String, Integer> orderCountMap = new HashMap<>();
-                                for (DataSnapshot order : orderSnapshot.getChildren()) {
-                                    for (DataSnapshot itemSnap : order.getChildren()) {
-                                        String dishId = itemSnap.child("dishId").getValue(String.class);
-                                        if (dishId != null) {
-                                            int prev = orderCountMap.getOrDefault(dishId, 0);
-                                            orderCountMap.put(dishId, prev + 1);
-                                        }
-                                    }
-                                }
-
-                                // Attach count to MenuItem
-                                for (MenuItem item : items) {
-                                    item.setOrderCount(orderCountMap.getOrDefault(item.getId(), 0));
-                                }
-
-                                callback.onMenuItemsLoaded(items);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                Log.e("HomeDataProvider", "Failed to load orders", error.toException());
-                                callback.onMenuItemsLoaded(items);
-                            }
-                        });
+                        callback.onMenuItemsLoaded(items);
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         Log.e("HomeDataProvider", "Failed to load reviews", error.toException());
-                        callback.onMenuItemsLoaded(items);
+                        callback.onMenuItemsLoaded(items);  // fallback with items without ratings
                     }
                 });
             }
@@ -128,6 +94,58 @@ public class HomeDataProvider {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e("HomeDataProvider", "Failed to load menu items", error.toException());
+            }
+        });
+    }
+    
+    public void getMenuItemsByCategory(String categoryId, final HomeDataCallback.MenuItemCallback callback) {
+        menuItemsRef.orderByChild("categoryId").equalTo(categoryId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<MenuItem> items = new ArrayList<>();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    MenuItem item = child.getValue(MenuItem.class);
+                    if (item != null) {
+                        item.setId(child.getKey());
+                        items.add(item);
+                    }
+                }
+                
+                // Get ratings for each item
+                ratingsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (MenuItem item : items) {
+                            double totalRating = 0;
+                            int ratingCount = 0;
+                            
+                            if (snapshot.child(item.getId()).exists()) {
+                                for (DataSnapshot ratingSnapshot : snapshot.child(item.getId()).getChildren()) {
+                                    Double rating = ratingSnapshot.getValue(Double.class);
+                                    if (rating != null) {
+                                        totalRating += rating;
+                                        ratingCount++;
+                                    }
+                                }
+                                if (ratingCount > 0) {
+                                    item.setRating(totalRating / ratingCount);
+                                }
+                            }
+                        }
+                        callback.onMenuItemsLoaded(items);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("HomeDataProvider", "Failed to load ratings for category items", error.toException());
+                        callback.onMenuItemsLoaded(items);  // fallback with items without ratings
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("HomeDataProvider", "Failed to load menu items by category", error.toException());
             }
         });
     }

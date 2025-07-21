@@ -10,7 +10,6 @@ public class MenuItem implements Serializable {
     private double rating;
     private String description;
     private String categoryId;
-    private int orderCount = 0;
 
     public MenuItem() {
 
@@ -88,12 +87,5 @@ public class MenuItem implements Serializable {
 
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
-    }
-    public int getOrderCount() {
-        return orderCount;
-    }
-
-    public void setOrderCount(int orderCount) {
-        this.orderCount = orderCount;
     }
 }
