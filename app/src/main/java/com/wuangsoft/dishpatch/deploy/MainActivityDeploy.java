@@ -126,6 +126,14 @@ public class MainActivityDeploy extends AppCompatActivity {
         startActivity(shoppingCartIntent);
     }
     
+    public void goToAccount(View view) {
+        ProfileFragment profileFragment = ProfileFragment.newInstance();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_layout, profileFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+    
     public void navigateToExploreWithCategory(String categoryName) {
         // Switch to explore tab
         binding.BottomNav.setSelectedItemId(R.id.explore_button);
