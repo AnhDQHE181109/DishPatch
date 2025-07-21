@@ -1,10 +1,14 @@
 package com.wuangsoft.dishpatch.deploy;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,39 +16,42 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.wuangsoft.dishpatch.R;
 import com.wuangsoft.dishpatch.controllers.CategoryFoodAdapter;
+import com.wuangsoft.dishpatch.controllers.SearchSuggestionAdapter;
 import com.wuangsoft.dishpatch.models.MenuItem;
 import com.wuangsoft.dishpatch.utilities.HomeDataCallback;
 import com.wuangsoft.dishpatch.utilities.HomeDataProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link VeganFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class VeganFragment extends Fragment {
 
     private CategoryFoodAdapter adapter;
     private HomeDataProvider dataProvider;
 
-    public VeganFragment() {
-        // Required empty public constructor
-    }
+    private EditText searchBar;
+    private LinearLayout searchResultsLayout;
+    private RecyclerView recyclerViewSearchSuggestions;
+
+    private SearchSuggestionAdapter searchSuggestionAdapter;
+    private List<MenuItem> allMenuItems = new ArrayList<>();
+
+    public VeganFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_vegan, container, false);
-        
+
         setupRecyclerView(view);
+        setupSearchComponents(view);
         setupCategoryButtons(view);
         loadVeganItems();
-        
+        loadAllMenuItemsForSearch(); // Load full menu for global search
+
         return view;
     }
-    
+
     private void setupRecyclerView(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.category_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -52,7 +59,42 @@ public class VeganFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         dataProvider = new HomeDataProvider();
     }
-    
+
+    private void setupSearchComponents(View view) {
+        searchBar = view.findViewById(R.id.searchbar);
+        searchResultsLayout = view.findViewById(R.id.searchResultsLayout);
+        recyclerViewSearchSuggestions = view.findViewById(R.id.recyclerViewSearchSuggestions);
+
+        recyclerViewSearchSuggestions.setLayoutManager(new LinearLayoutManager(getContext()));
+        searchSuggestionAdapter = new SearchSuggestionAdapter();
+        recyclerViewSearchSuggestions.setAdapter(searchSuggestionAdapter);
+
+        searchResultsLayout.setVisibility(View.GONE);
+
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String input = s.toString().trim().toLowerCase();
+                if (input.isEmpty()) {
+                    searchResultsLayout.setVisibility(View.GONE);
+                    searchSuggestionAdapter.setMenuItems(new ArrayList<>());
+                } else {
+                    List<MenuItem> filtered = new ArrayList<>();
+                    for (MenuItem item : allMenuItems) {
+                        if (item.getName().toLowerCase().contains(input)) {
+                            filtered.add(item);
+                        }
+                    }
+                    searchSuggestionAdapter.setMenuItems(filtered);
+                    searchResultsLayout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
     private void loadVeganItems() {
         dataProvider.getMenuItemsByCategory("cat05", new HomeDataCallback.MenuItemCallback() {
             @Override
@@ -63,33 +105,35 @@ public class VeganFragment extends Fragment {
             }
         });
     }
-    
+
+    private void loadAllMenuItemsForSearch() {
+        dataProvider.getMenuItems(new HomeDataCallback.MenuItemCallback() {
+            @Override
+            public void onMenuItemsLoaded(List<MenuItem> items) {
+                allMenuItems = new ArrayList<>(items); // Save for filtering
+            }
+        });
+    }
+
     private void setupCategoryButtons(View view) {
         ImageButton snacksBtn = view.findViewById(R.id.snacksbttn);
         ImageButton mealsBtn = view.findViewById(R.id.mealbttn);
         ImageButton veganBtn = view.findViewById(R.id.veganbttn);
         ImageButton dessertBtn = view.findViewById(R.id.dessertbttn);
         ImageButton drinksBtn = view.findViewById(R.id.drinksbttn);
-        
-        // Set current fragment as active
-        if (veganBtn != null) {
-            veganBtn.setSelected(true);
-        }
-        
-        if (snacksBtn != null) {
+
+        if (veganBtn != null) veganBtn.setSelected(true);
+
+        if (snacksBtn != null)
             snacksBtn.setOnClickListener(v -> navigateToCategory("snacks"));
-        }
-        if (mealsBtn != null) {
+        if (mealsBtn != null)
             mealsBtn.setOnClickListener(v -> navigateToCategory("meal"));
-        }
-        if (dessertBtn != null) {
+        if (dessertBtn != null)
             dessertBtn.setOnClickListener(v -> navigateToCategory("dessert"));
-        }
-        if (drinksBtn != null) {
+        if (drinksBtn != null)
             drinksBtn.setOnClickListener(v -> navigateToCategory("drinks"));
-        }
     }
-    
+
     private void navigateToCategory(String category) {
         if (getActivity() instanceof MainActivityDeploy) {
             MainActivityDeploy mainActivity = (MainActivityDeploy) getActivity();
